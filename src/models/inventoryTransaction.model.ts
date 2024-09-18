@@ -6,8 +6,8 @@ import {
     ManyToOne,
     CreateDateColumn,
 } from 'typeorm';
-  import { InventoryItem } from './inventoryItem.entity';
-  import { User } from './user.entity';
+  import { InventoryItem } from './inventoryItem.model';
+  import { User } from './user.model';
   
   @Entity()
   export class InventoryTransaction {

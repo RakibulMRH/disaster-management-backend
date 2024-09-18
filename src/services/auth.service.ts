@@ -1,11 +1,11 @@
 // services/auth.service.ts
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../models/user.model';
 import { CreateUserDto } from '../dtos/user.dto';
 import { LoginDto } from '../dtos/login.dto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { AppDataSource } from '../data-source';
+import { AppDataSource } from '../config/database.config';
 
 
 export class AuthService {

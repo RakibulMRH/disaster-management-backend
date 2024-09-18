@@ -1,6 +1,6 @@
 // src/entities/inventoryItem.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { InventoryTransaction } from './inventoryTransaction.entity';
+import { InventoryTransaction } from './inventoryTransaction.model';
 
 @Entity()
 export class InventoryItem {

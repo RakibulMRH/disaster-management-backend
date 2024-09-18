@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryItem = void 0;
 // src/entities/inventoryItem.entity.ts
 const typeorm_1 = require("typeorm");
-const inventoryTransaction_entity_1 = require("./inventoryTransaction.entity");
+const inventoryTransaction_model_1 = require("./inventoryTransaction.model");
 let InventoryItem = class InventoryItem {
 };
 exports.InventoryItem = InventoryItem;
@@ -33,7 +33,7 @@ __decorate([
     __metadata("design:type", String)
 ], InventoryItem.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => inventoryTransaction_entity_1.InventoryTransaction, (transaction) => transaction.item),
+    (0, typeorm_1.OneToMany)(() => inventoryTransaction_model_1.InventoryTransaction, (transaction) => transaction.item),
     __metadata("design:type", Array)
 ], InventoryItem.prototype, "transactions", void 0);
 exports.InventoryItem = InventoryItem = __decorate([

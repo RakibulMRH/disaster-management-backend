@@ -13,16 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
-const user_entity_1 = require("../entities/user.entity");
+const user_model_1 = require("../models/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const app_1 = require("../app"); // Import the existing DataSource
+const database_config_1 = require("../config/database.config");
 class AuthService {
     constructor() {
-        if (!app_1.AppDataSource.isInitialized) {
-            throw new Error('DataSource is not initialized');
-        }
-        this.userRepository = app_1.AppDataSource.getRepository(user_entity_1.User);
+        database_config_1.AppDataSource.initialize().then(() => {
+            this.userRepository = database_config_1.AppDataSource.getRepository(user_model_1.User);
+        }).catch(error => console.log("Error initializing AppDataSource", error));
     }
     register(createUserDto) {
         return __awaiter(this, void 0, void 0, function* () {

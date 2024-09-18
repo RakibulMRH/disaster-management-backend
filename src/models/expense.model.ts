@@ -6,7 +6,7 @@ import {
     CreateDateColumn,
     ManyToOne,
   } from 'typeorm';
-  import { User } from './user.entity';
+  import { User } from './user.model';
   
   @Entity()
   export class Expense {

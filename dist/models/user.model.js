@@ -13,10 +13,10 @@ exports.User = void 0;
 // src/entities/user.entity.ts
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
-const volunteerAssignment_entity_1 = require("./volunteerAssignment.entity");
-const crisis_entity_1 = require("./crisis.entity");
-const inventoryTransaction_entity_1 = require("./inventoryTransaction.entity");
-const expense_entity_1 = require("./expense.entity");
+const volunteerAssignment_model_1 = require("./volunteerAssignment.model");
+const crisis_model_1 = require("./crisis.model");
+const inventoryTransaction_model_1 = require("./inventoryTransaction.model");
+const expense_model_1 = require("./expense.model");
 let User = class User {
 };
 exports.User = User;
@@ -62,27 +62,27 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => volunteerAssignment_entity_1.VolunteerAssignment, (assignment) => assignment.volunteer),
+    (0, typeorm_1.OneToMany)(() => volunteerAssignment_model_1.VolunteerAssignment, (assignment) => assignment.volunteer),
     __metadata("design:type", Array)
 ], User.prototype, "assignments", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => volunteerAssignment_entity_1.VolunteerAssignment, (assignment) => assignment.assignedByAdmin),
+    (0, typeorm_1.OneToMany)(() => volunteerAssignment_model_1.VolunteerAssignment, (assignment) => assignment.assignedByAdmin),
     __metadata("design:type", Array)
 ], User.prototype, "assignedTasks", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => crisis_entity_1.Crisis, (crisis) => crisis.reportedByUser),
+    (0, typeorm_1.OneToMany)(() => crisis_model_1.Crisis, (crisis) => crisis.reportedByUser),
     __metadata("design:type", Array)
 ], User.prototype, "reportedCrises", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => crisis_entity_1.Crisis, (crisis) => crisis.approvedByAdmin),
+    (0, typeorm_1.OneToMany)(() => crisis_model_1.Crisis, (crisis) => crisis.approvedByAdmin),
     __metadata("design:type", Array)
 ], User.prototype, "approvedCrises", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => inventoryTransaction_entity_1.InventoryTransaction, (transaction) => transaction.user),
+    (0, typeorm_1.OneToMany)(() => inventoryTransaction_model_1.InventoryTransaction, (transaction) => transaction.user),
     __metadata("design:type", Array)
 ], User.prototype, "inventoryTransactions", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => expense_entity_1.Expense, (expense) => expense.user),
+    (0, typeorm_1.OneToMany)(() => expense_model_1.Expense, (expense) => expense.user),
     __metadata("design:type", Array)
 ], User.prototype, "expenses", void 0);
 exports.User = User = __decorate([

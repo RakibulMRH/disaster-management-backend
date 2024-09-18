@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.VolunteerAssignment = void 0;
 // src/entities/volunteerAssignment.entity.ts
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
-const crisis_entity_1 = require("./crisis.entity");
+const user_model_1 = require("./user.model");
+const crisis_model_1 = require("./crisis.model");
 let VolunteerAssignment = class VolunteerAssignment {
 };
 exports.VolunteerAssignment = VolunteerAssignment;
@@ -22,12 +22,12 @@ __decorate([
     __metadata("design:type", Number)
 ], VolunteerAssignment.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.assignments, { onDelete: 'CASCADE' }),
-    __metadata("design:type", user_entity_1.User)
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.assignments, { onDelete: 'CASCADE' }),
+    __metadata("design:type", user_model_1.User)
 ], VolunteerAssignment.prototype, "volunteer", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => crisis_entity_1.Crisis, (crisis) => crisis, { nullable: true, onDelete: 'SET NULL' }),
-    __metadata("design:type", crisis_entity_1.Crisis)
+    (0, typeorm_1.ManyToOne)(() => crisis_model_1.Crisis, (crisis) => crisis, { nullable: true, onDelete: 'SET NULL' }),
+    __metadata("design:type", crisis_model_1.Crisis)
 ], VolunteerAssignment.prototype, "crisis", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
@@ -38,8 +38,8 @@ __decorate([
     __metadata("design:type", String)
 ], VolunteerAssignment.prototype, "location", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.assignedTasks, { onDelete: 'CASCADE' }),
-    __metadata("design:type", user_entity_1.User)
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.assignedTasks, { onDelete: 'CASCADE' }),
+    __metadata("design:type", user_model_1.User)
 ], VolunteerAssignment.prototype, "assignedByAdmin", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),

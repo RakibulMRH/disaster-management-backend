@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Crisis = void 0;
 // src/entities/crisis.entity.ts
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
+const user_model_1 = require("./user.model");
 let Crisis = class Crisis {
 };
 exports.Crisis = Crisis;
@@ -53,12 +53,12 @@ __decorate([
     __metadata("design:type", Date)
 ], Crisis.prototype, "dateReported", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.reportedCrises, { nullable: true }),
-    __metadata("design:type", user_entity_1.User)
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.reportedCrises, { nullable: true }),
+    __metadata("design:type", user_model_1.User)
 ], Crisis.prototype, "reportedByUser", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.approvedCrises, { nullable: true }),
-    __metadata("design:type", user_entity_1.User)
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.approvedCrises, { nullable: true }),
+    __metadata("design:type", user_model_1.User)
 ], Crisis.prototype, "approvedByAdmin", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),

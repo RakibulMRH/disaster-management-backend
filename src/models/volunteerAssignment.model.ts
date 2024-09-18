@@ -6,8 +6,8 @@ import {
     ManyToOne,
     CreateDateColumn,
   } from 'typeorm';
-  import { User } from './user.entity';
-  import { Crisis } from './crisis.entity';
+  import { User } from './user.model';
+  import { Crisis } from './crisis.model';
   
   @Entity()
   export class VolunteerAssignment {

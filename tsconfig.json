@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "rootDir": "./", // Ensure this is set to the root directory
+    "rootDir": "./src", // Ensure this is set to the root directory
     "outDir": "./dist", // Output directory for compiled files
     "esModuleInterop": true,
     "strictPropertyInitialization": false,
@@ -10,8 +10,12 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "src", // Base URL for module resolution
+    "paths": {
+      "@/*": ["./*"] // Alias for imports
+    }
   },
-  "include": ["**/*.ts"], // Include all TypeScript files
+  "include": ["src/**/*.ts"], // Include all TypeScript files in the src directory
   "exclude": ["node_modules", "dist"] // Exclude node_modules and dist directories
-} 
+}

@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryTransaction = void 0;
 // src/entities/inventoryTransaction.entity.ts
 const typeorm_1 = require("typeorm");
-const inventoryItem_entity_1 = require("./inventoryItem.entity");
-const user_entity_1 = require("./user.entity");
+const inventoryItem_model_1 = require("./inventoryItem.model");
+const user_model_1 = require("./user.model");
 let InventoryTransaction = class InventoryTransaction {
 };
 exports.InventoryTransaction = InventoryTransaction;
@@ -22,8 +22,8 @@ __decorate([
     __metadata("design:type", Number)
 ], InventoryTransaction.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => inventoryItem_entity_1.InventoryItem, (item) => item.transactions, { onDelete: 'CASCADE' }),
-    __metadata("design:type", inventoryItem_entity_1.InventoryItem)
+    (0, typeorm_1.ManyToOne)(() => inventoryItem_model_1.InventoryItem, (item) => item.transactions, { onDelete: 'CASCADE' }),
+    __metadata("design:type", inventoryItem_model_1.InventoryItem)
 ], InventoryTransaction.prototype, "item", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar' }),
@@ -46,8 +46,8 @@ __decorate([
     __metadata("design:type", Date)
 ], InventoryTransaction.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.inventoryTransactions, { nullable: true }),
-    __metadata("design:type", user_entity_1.User)
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.inventoryTransactions, { nullable: true }),
+    __metadata("design:type", user_model_1.User)
 ], InventoryTransaction.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),

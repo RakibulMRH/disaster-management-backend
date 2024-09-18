@@ -9,10 +9,10 @@ import {
 } from 'typeorm';
 
 import { IsEmail } from 'class-validator';
-import { VolunteerAssignment } from './volunteerAssignment.entity';
-import { Crisis } from './crisis.entity';
-import { InventoryTransaction } from './inventoryTransaction.entity';
-import { Expense } from './expense.entity';
+import { VolunteerAssignment } from './volunteerAssignment.model';
+import { Crisis } from './crisis.model';
+import { InventoryTransaction } from './inventoryTransaction.model';
+import { Expense } from './expense.model';
 
 @Entity()
 @Unique(['username', 'email'])
