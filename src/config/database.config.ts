@@ -2,6 +2,15 @@ import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 import path from 'path';
 
+// Import your entity classes
+import { User } from '../models/user.model';
+import { Crisis } from '../models/crisis.model';
+import { Donation } from '../models/donation.model';
+import { InventoryItem } from '../models/inventoryItem.model';
+import { InventoryTransaction } from '../models/inventoryTransaction.model';
+import { Expense } from '../models/expense.model';
+import { VolunteerAssignment } from '../models/volunteerAssignment.model';
+
 // Load .env file
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -14,7 +23,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'disaster_management',
   synchronize: true,  
   logging: false,
-  entities: ['src/entities/**/*.ts'],
+  entities: [User, Crisis, Donation, InventoryItem, InventoryTransaction, Expense, VolunteerAssignment], // Use the entity classes directly
   migrations: ['src/migrations/**/*.ts'],
   subscribers: ['src/subscribers/**/*.ts'],
 });

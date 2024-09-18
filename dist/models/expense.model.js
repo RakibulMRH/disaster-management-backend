@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Expense = void 0;
-// src/entities/expense.entity.ts
 const typeorm_1 = require("typeorm");
 const user_model_1 = require("./user.model");
 let Expense = class Expense {
@@ -26,6 +25,8 @@ __decorate([
 ], Expense.prototype, "amount", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.Index)() // Added index to date for faster range querying
+    ,
     __metadata("design:type", Date)
 ], Expense.prototype, "date", void 0);
 __decorate([

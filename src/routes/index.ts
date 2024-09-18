@@ -1,6 +1,7 @@
 // src/routes/index.ts
 import { Router } from 'express';
 import authRoutes from './auth.routes';
+import adminRoutes from './admin.routes';
 //import userRoutes from './users.routes';
 // Import other route modules as needed
 
@@ -13,6 +14,7 @@ import reportRoutes from './reports.routes';*/
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/admin', adminRoutes);
 /*router.use('/users', userRoutes);
  router.use('/donations', donationRoutes);
 router.use('/crises', crisisRoutes);

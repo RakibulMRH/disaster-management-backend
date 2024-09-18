@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Crisis = void 0;
-// src/entities/crisis.entity.ts
 const typeorm_1 = require("typeorm");
 const user_model_1 = require("./user.model");
 let Crisis = class Crisis {
@@ -21,6 +20,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Crisis.prototype, "id", void 0);
 __decorate([
+    (0, typeorm_1.Index)(),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Crisis.prototype, "title", void 0);
@@ -45,6 +45,7 @@ __decorate([
     __metadata("design:type", String)
 ], Crisis.prototype, "requiredHelp", void 0);
 __decorate([
+    (0, typeorm_1.Index)(),
     (0, typeorm_1.Column)({ type: 'varchar', default: 'pending' }),
     __metadata("design:type", String)
 ], Crisis.prototype, "status", void 0);

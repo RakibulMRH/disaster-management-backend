@@ -1,49 +1,46 @@
-// src/entities/crisis.entity.ts
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    ManyToOne,
-  } from 'typeorm';
-  import { User } from './user.model';
-  
-  @Entity()
-  export class Crisis {
+"use strict";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Index } from "typeorm";
+import { User } from "./user.model";
+
+@Entity()
+export class Crisis {
     @PrimaryGeneratedColumn()
-    id!: number;
-  
+    id: number;
+
+    // Added index for faster searching of crisis by title
+    @Index()
     @Column()
-    title!: string;
-  
+    title: string;
+
     @Column({ type: 'text', nullable: true })
-    description?: string;
-  
+    description: string;
+
     @Column({ nullable: true })
-    location?: string;
-  
+    location: string;
+
     @Column({ nullable: true })
-    imageUrl?: string;
-  
+    imageUrl: string;
+
     @Column({ type: 'varchar' })
-    severity!: 'low' | 'medium' | 'high' | 'critical';
-  
+    severity: string;
+
     @Column({ type: 'text', nullable: true })
-    requiredHelp?: string;
-  
+    requiredHelp: string;
+
+    // Added index for status
+    @Index()
     @Column({ type: 'varchar', default: 'pending' })
-    status!: 'pending' | 'approved' | 'resolved' | 'rejected';
-  
+    status: string;
+
     @CreateDateColumn()
-    dateReported!: Date;
-  
+    dateReported: Date;
+
     @ManyToOne(() => User, (user) => user.reportedCrises, { nullable: true })
-    reportedByUser?: User;
-  
+    reportedByUser: User;
+
     @ManyToOne(() => User, (user) => user.approvedCrises, { nullable: true })
-    approvedByAdmin?: User;
-  
+    approvedByAdmin: User;
+
     @Column({ nullable: true })
-    dateApproved?: Date;
-  }
-  
+    dateApproved: Date;
+}

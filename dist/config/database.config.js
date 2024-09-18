@@ -7,6 +7,14 @@ exports.AppDataSource = void 0;
 const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
+// Import your entity classes
+const user_model_1 = require("../models/user.model");
+const crisis_model_1 = require("../models/crisis.model");
+const donation_model_1 = require("../models/donation.model");
+const inventoryItem_model_1 = require("../models/inventoryItem.model");
+const inventoryTransaction_model_1 = require("../models/inventoryTransaction.model");
+const expense_model_1 = require("../models/expense.model");
+const volunteerAssignment_model_1 = require("../models/volunteerAssignment.model");
 // Load .env file
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
 exports.AppDataSource = new typeorm_1.DataSource({
@@ -18,7 +26,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     database: process.env.DB_DATABASE || 'disaster_management',
     synchronize: true,
     logging: false,
-    entities: ['src/entities/**/*.ts'],
+    entities: [user_model_1.User, crisis_model_1.Crisis, donation_model_1.Donation, inventoryItem_model_1.InventoryItem, inventoryTransaction_model_1.InventoryTransaction, expense_model_1.Expense, volunteerAssignment_model_1.VolunteerAssignment], // Use the entity classes directly
     migrations: ['src/migrations/**/*.ts'],
     subscribers: ['src/subscribers/**/*.ts'],
 });

@@ -3,17 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.swaggerSpecs = exports.swaggerOptions = void 0;
+exports.swaggerSpecs = void 0;
+// src/config/swagger.config.ts
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
-exports.swaggerOptions = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Your API Name',
-            version: '1.0.0',
-            description: 'Your API Description',
-        },
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'Disaster Management API',
+        version: '1.0.0',
+        description: 'APIs for disaster management system',
     },
-    apis: ['./src/docs/swagger.ts', './src/routes/*.ts'],
+    servers: [
+        {
+            url: 'http://localhost:3000',
+            description: 'Development server',
+        },
+    ],
 };
-exports.swaggerSpecs = (0, swagger_jsdoc_1.default)(exports.swaggerOptions);
+const options = {
+    swaggerDefinition,
+    apis: ['./src/routes/*.ts'], // Path to the API docs
+};
+exports.swaggerSpecs = (0, swagger_jsdoc_1.default)(options);

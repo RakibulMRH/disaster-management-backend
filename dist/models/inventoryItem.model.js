@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryItem = void 0;
-// src/entities/inventoryItem.entity.ts
 const typeorm_1 = require("typeorm");
 const inventoryTransaction_model_1 = require("./inventoryTransaction.model");
 let InventoryItem = class InventoryItem {
@@ -21,11 +20,12 @@ __decorate([
     __metadata("design:type", Number)
 ], InventoryItem.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], InventoryItem.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar' }),
+    (0, typeorm_1.Index)(),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100 }),
     __metadata("design:type", String)
 ], InventoryItem.prototype, "type", void 0);
 __decorate([

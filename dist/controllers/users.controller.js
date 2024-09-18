@@ -16,6 +16,9 @@ const router = (0, express_1.Router)();
 const usersService = new users_service_1.UsersService();
 router.get('/profile', auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
         const user = yield usersService.getUserById(req.user.id);
         res.json(user);
     }

@@ -9,6 +9,9 @@ const usersService = new UsersService();
 
 router.get('/profile', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
     const user = await usersService.getUserById(req.user.id);
     res.json(user);
   } catch (error) {

@@ -14,8 +14,8 @@ const database_config_1 = require("./config/database.config");
 const swagger_config_1 = require("./config/swagger.config"); // Import the Swagger specs
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const error_middleware_1 = require("./middleware/error.middleware");
-const auth_controller_1 = __importDefault(require("./controllers/auth.controller")); // Import the auth router
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env') });
+const routes_1 = __importDefault(require("./routes"));
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
 // Initialize Express
 const app = (0, express_1.default)();
 // Middleware
@@ -24,9 +24,7 @@ app.use((0, cors_1.default)());
 app.use((0, helmet_1.default)());
 app.use((0, morgan_1.default)('combined'));
 // API Routes
-const routes = require('../routes/index').default;
-app.use('/api', routes);
-app.use('/auth', auth_controller_1.default);
+app.use(routes_1.default);
 // Swagger setup
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpecs));
 // Error Handling Middleware

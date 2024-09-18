@@ -8,46 +8,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
+exports.AdminService = void 0;
 const database_config_1 = require("../config/database.config");
 const user_model_1 = require("../models/user.model");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-class AuthService {
-    // Function to create a new user
-    static createUser(userData) {
+class AdminService {
+    // Verify a user by ID
+    static verifyUser(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const userRepository = database_config_1.AppDataSource.getRepository(user_model_1.User);
-            // Create new user instance
-            const newUser = userRepository.create(userData);
-            // Save user to the database
-            yield userRepository.save(newUser);
-            return newUser;
+            const user = yield userRepository.findOne({ where: { id: userId } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+            // Mark the user as verified
+            user.isVerified = true;
+            yield userRepository.save(user);
+            return user;
         });
     }
-    // Function to validate password
-    static validatePassword(password, hash) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return bcryptjs_1.default.compare(password, hash);
-        });
-    }
-    // Function to generate a JWT token
-    static generateJwt(user) {
-        const payload = { id: user.id, username: user.username, role: user.role };
-        return jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-    }
-    // Function to find a user by username or email
-    static findByUsernameOrEmail(usernameOrEmail) {
+    // Assign a role to a user (Admin, Volunteer, etc.)
+    static assignRole(userId, role) {
         return __awaiter(this, void 0, void 0, function* () {
             const userRepository = database_config_1.AppDataSource.getRepository(user_model_1.User);
-            return userRepository.findOne({
-                where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-            });
+            const user = yield userRepository.findOne({ where: { id: userId } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+            // Assign the role
+            user.role = role;
+            yield userRepository.save(user);
+            return user;
+        });
+    }
+    // List all unverified users
+    static listUnverifiedUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userRepository = database_config_1.AppDataSource.getRepository(user_model_1.User);
+            const unverifiedUsers = yield userRepository.find({ where: { isVerified: false } });
+            return unverifiedUsers;
         });
     }
 }
-exports.AuthService = AuthService;
+exports.AdminService = AdminService;

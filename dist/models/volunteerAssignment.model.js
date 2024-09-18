@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VolunteerAssignment = void 0;
-// src/entities/volunteerAssignment.entity.ts
 const typeorm_1 = require("typeorm");
 const user_model_1 = require("./user.model");
 const crisis_model_1 = require("./crisis.model");
@@ -46,6 +45,7 @@ __decorate([
     __metadata("design:type", Date)
 ], VolunteerAssignment.prototype, "dateAssigned", void 0);
 __decorate([
+    (0, typeorm_1.Index)(),
     (0, typeorm_1.Column)({ type: 'varchar', default: 'assigned' }),
     __metadata("design:type", String)
 ], VolunteerAssignment.prototype, "status", void 0);

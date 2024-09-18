@@ -1,62 +1,38 @@
-// services/auth.service.ts
-import { Repository } from 'typeorm';
-import { User } from '../models/user.model';
-import { CreateUserDto } from '../dtos/user.dto';
-import { LoginDto } from '../dtos/login.dto';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database.config';
-
+import { User } from '../models/user.model';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export class AuthService {
-  private userRepository: Repository<User>;
+  // Function to create a new user
+  static async createUser(userData: Partial<User>) {
+    const userRepository = AppDataSource.getRepository(User);
 
-  constructor() {
-    AppDataSource.initialize().then(() => {
-      this.userRepository = AppDataSource.getRepository(User);
-    }).catch(error => console.log("Error initializing AppDataSource", error));
+    // Create new user instance
+    const newUser = userRepository.create(userData);
+
+    // Save user to the database
+    await userRepository.save(newUser);
+
+    return newUser;
   }
 
-  async register(createUserDto: CreateUserDto): Promise<User> {
-    const { name, username, password, email, phoneNumber, age } = createUserDto;
+  // Function to validate password
+  static async validatePassword(password: string, hash: string) {
+    return bcrypt.compare(password, hash);
+  }
 
-    const existingUser = await this.userRepository.findOne({ where: { username } });
-    if (existingUser) {
-      throw new Error('Username already exists');
-    }
+  // Function to generate a JWT token
+  static generateJwt(user: User) {
+    const payload = { id: user.id, username: user.username, role: user.role };
+    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
+  }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = this.userRepository.create({
-      name,
-      username,
-      password: hashedPassword,
-      email,
-      phoneNumber,
-      age,
-      role: 'volunteer',
+  // Function to find a user by username or email
+  static async findByUsernameOrEmail(usernameOrEmail: string) {
+    const userRepository = AppDataSource.getRepository(User);
+    return userRepository.findOne({
+      where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
     });
-
-    return this.userRepository.save(user);
-  }
-
-  async login(loginDto: LoginDto): Promise<string> {
-    const { username, password } = loginDto;
-
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) {
-      throw new Error('Invalid credentials');
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
-    }
-
-    const payload = { id: user.id, role: user.role };
-    const secret = process.env.JWT_SECRET || 'your_jwt_secret';
-    const token = jwt.sign(payload, secret, { expiresIn: '1d' });
-
-    return token;
   }
 }

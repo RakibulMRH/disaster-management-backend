@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { register, login } from '../controllers/auth.controller';
-
-const router = Router();
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_controller_1 = require("../controllers/auth.controller");
+const router = (0, express_1.Router)();
 /**
  * @swagger
  * /auth/register:
@@ -69,7 +69,6 @@ const router = Router();
  *                   type: string
  *                   example: Username or email already in use
  */
-
 /**
  * @swagger
  * /auth/login:
@@ -117,8 +116,6 @@ const router = Router();
  *                   type: string
  *                   example: Invalid credentials
  */
-
-router.post('/register', register);
-router.post('/login', login);
-
-export default router;
+router.post('/register', auth_controller_1.register);
+router.post('/login', auth_controller_1.login);
+exports.default = router;

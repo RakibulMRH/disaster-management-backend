@@ -1,4 +1,3 @@
-// src/config/swagger.config.ts
 import swaggerJSDoc from 'swagger-jsdoc';
 
 const swaggerDefinition = {
@@ -14,11 +13,25 @@ const swaggerDefinition = {
       description: 'Development server',
     },
   ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [], // Apply JWT to all routes
+    },
+  ],
 };
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/*.ts'], // Path to the API docs
+  apis: ['./src/routes/*.ts', './src/docs/**/*.ts'], // Paths to the API docs (can include models and controllers if needed)
 };
 
 export const swaggerSpecs = swaggerJSDoc(options);

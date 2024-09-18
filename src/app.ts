@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(morgan('combined'));
 
 // API Routes
-app.use('/api', routes); 
+app.use(routes); 
 
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));

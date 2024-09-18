@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./src/types"], // Type definitions for TypeScript
     "target": "es2016",
     "module": "commonjs",
     "rootDir": "./src", // Ensure this is set to the root directory
