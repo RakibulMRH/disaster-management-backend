@@ -52,7 +52,7 @@ export class User {
 
     @OneToMany(() => Crisis, (crisis) => crisis.reportedByUser)
     reportedCrises: Crisis[];
-
+  
     @OneToMany(() => Crisis, (crisis) => crisis.approvedByAdmin)
     approvedCrises: Crisis[];
 

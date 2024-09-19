@@ -5,10 +5,17 @@ const auth_controller_1 = require("../controllers/auth.controller");
 const router = (0, express_1.Router)();
 /**
  * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication and user management
+ */
+/**
+ * @swagger
  * /auth/register:
  *   post:
  *     summary: Register a new user
- *     description: Register a new user by providing necessary details like username, password, name, and email.
+ *     description: This endpoint allows a user to register by providing necessary details like username, password, name, and email. After successful registration, the user is assigned a default role of "User".
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -73,8 +80,9 @@ const router = (0, express_1.Router)();
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Login a user
- *     description: Login a user by providing username or email and password to receive a JWT token.
+ *     summary: User login
+ *     description: This endpoint allows a user to log in by providing a valid username or email and password. Upon successful authentication, a JWT token is returned for subsequent API requests.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:

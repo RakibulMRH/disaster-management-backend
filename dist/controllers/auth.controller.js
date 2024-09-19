@@ -48,7 +48,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         email: createUserDto.email,
         phoneNumber: createUserDto.phoneNumber,
         age: createUserDto.age,
-        role: 'User', // Default role, you can modify this based on your logic
+        role: 'Volunteer', // Default role, you can modify this based on your logic
     });
     return res.status(201).json({ message: 'User registered successfully', newUser });
 });

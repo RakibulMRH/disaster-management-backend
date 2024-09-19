@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_routes_1 = __importDefault(require("./auth.routes"));
 const admin_routes_1 = __importDefault(require("./admin.routes"));
+const crisis_routes_1 = __importDefault(require("./crisis.routes"));
 //import userRoutes from './users.routes';
 // Import other route modules as needed
 /*import donationRoutes from './donations.routes';
@@ -17,6 +18,7 @@ import reportRoutes from './reports.routes';*/
 const router = (0, express_1.Router)();
 router.use('/auth', auth_routes_1.default);
 router.use('/admin', admin_routes_1.default);
+router.use('/crises', crisis_routes_1.default);
 /*router.use('/users', userRoutes);
  router.use('/donations', donationRoutes);
 router.use('/crises', crisisRoutes);

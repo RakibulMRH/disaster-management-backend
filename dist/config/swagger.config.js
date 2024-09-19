@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.swaggerSpecs = void 0;
-// src/config/swagger.config.ts
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swaggerDefinition = {
     openapi: '3.0.0',
@@ -19,9 +18,23 @@ const swaggerDefinition = {
             description: 'Development server',
         },
     ],
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+            },
+        },
+    },
+    security: [
+        {
+            bearerAuth: [], // Apply JWT to all routes
+        },
+    ],
 };
 const options = {
     swaggerDefinition,
-    apis: ['./src/routes/*.ts'], // Path to the API docs
+    apis: ['./src/routes/*.ts', './src/docs/**/*.ts'], // Paths to the API docs (can include models and controllers if needed)
 };
 exports.swaggerSpecs = (0, swagger_jsdoc_1.default)(options);

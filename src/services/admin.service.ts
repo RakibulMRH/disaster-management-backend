@@ -1,6 +1,7 @@
 import { AppDataSource } from '../config/database.config';
 import { User } from '../models/user.model';
 
+
 export class AdminService {
   // Verify a user by ID
   static async verifyUser(userId: number) {
@@ -40,4 +41,6 @@ export class AdminService {
     const unverifiedUsers = await userRepository.find({ where: { isVerified: false } });
     return unverifiedUsers;
   }
+
+  
 }

@@ -1,4 +1,6 @@
 "use strict";
+// src/app.ts
+/// <reference path="./types/express.d.ts" />
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };

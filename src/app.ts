@@ -1,3 +1,6 @@
+// src/app.ts
+/// <reference path="./types/express.d.ts" />
+
 import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';

@@ -1,5 +1,8 @@
-// Extend the Express Request interface to include a user property
-declare namespace Express {
+// src/types/express.d.ts
+import { Request } from 'express';
+
+declare global {
+  namespace Express {
     export interface Request {
       user?: {
         id: number;
@@ -8,4 +11,4 @@ declare namespace Express {
       };
     }
   }
-  
+}
