@@ -48,5 +48,9 @@ export class UpdateUserDto {
     @Min(0)
     @Max(120)
     age?: number;
+
+    @IsString()
+    @IsOptional()
+    password?: string;
   }
   

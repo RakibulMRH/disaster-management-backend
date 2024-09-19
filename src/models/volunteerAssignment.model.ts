@@ -1,33 +1,22 @@
 "use strict";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Index } from "typeorm";
-import { User } from "./user.model";
-import { Crisis } from "./crisis.model";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, Column } from 'typeorm';
+import { User } from './user.model';
+import { Assignment } from './assignment.model';
 
 @Entity()
 export class VolunteerAssignment {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => User, (user) => user.assignments, { onDelete: 'CASCADE' })
-    volunteer: User;
+  @ManyToOne(() => User, (user) => user.assignments, { onDelete: 'CASCADE' })
+  volunteer: User;
 
-    @ManyToOne(() => Crisis, (crisis) => crisis, { nullable: true, onDelete: 'SET NULL' })
-    crisis: Crisis;
+  @ManyToOne(() => Assignment, (assignment) => assignment.volunteers, { nullable: true, onDelete: 'SET NULL' })
+  assignment: Assignment;
 
-    @Column({ type: 'text', nullable: true })
-    taskDescription: string;
+  @CreateDateColumn()
+  dateAssigned: Date;
 
-    @Column({ nullable: true })
-    location: string;
-
-    @ManyToOne(() => User, (user) => user.assignedTasks, { onDelete: 'CASCADE' })
-    assignedByAdmin: User;
-
-    @CreateDateColumn()
-    dateAssigned: Date;
-
-    // Added index for faster querying of assignment statuses
-    @Index()
-    @Column({ type: 'varchar', default: 'assigned' })
-    status: string;
+  @Column({ type: 'varchar', default: 'active' })
+  status: string;
 }
