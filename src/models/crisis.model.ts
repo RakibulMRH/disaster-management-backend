@@ -1,6 +1,7 @@
 "use strict";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Index } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Index, OneToMany } from "typeorm";
 import { User } from "./user.model";
+import { Donation } from './donation.model';  
 
 @Entity()
 export class Crisis {
@@ -41,6 +42,11 @@ export class Crisis {
     @ManyToOne(() => User, (user) => user.approvedCrises, { nullable: true })
     approvedByAdmin: User;
 
+    @OneToMany(() => Donation, (donation) => donation.crisis)
+    donations: Donation[];
+
     @Column({ nullable: true })
     dateApproved: Date;
+
+    
 }

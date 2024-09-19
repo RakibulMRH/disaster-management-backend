@@ -1,15 +1,18 @@
-import { IsString, IsNotEmpty, IsOptional, IsDecimal, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsNumber, Min } from 'class-validator';
 
 export class CreateDonationDto {
-  @IsOptional()
   @IsString()
-  donorName?: string;
+  @IsNotEmpty()
+  donorName: string;
 
-  @IsDecimal()
-  @Min(10)
-  amount!: number; // Use the definite assignment assertion
+  @IsNumber()
+  @Min(1)
+  amount: number;
 
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsNumber()
+  crisisId: number;  
 }

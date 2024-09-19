@@ -3,6 +3,7 @@ import { Router } from 'express';
 import authRoutes from './auth.routes';
 import adminRoutes from './admin.routes';
 import crisisRoutes from './crisis.routes';
+import donationRoutes from './donation.routes';
 //import userRoutes from './users.routes';
 // Import other route modules as needed
 
@@ -17,8 +18,8 @@ const router = Router();
 router.use('/auth', authRoutes);
 router.use('/admin', adminRoutes);
 router.use('/crises', crisisRoutes);
-/*router.use('/users', userRoutes);
- router.use('/donations', donationRoutes);
+router.use('/donations', donationRoutes);
+/*router.use('/users', userRoutes); 
 router.use('/crises', crisisRoutes);
 router.use('/inventory', inventoryRoutes);
 router.use('/assignments', assignmentRoutes);

@@ -1,5 +1,6 @@
 "use strict";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn, Index } from "typeorm";
+import { Crisis } from './crisis.model';  
 
 @Entity()
 export class Donation {
@@ -18,4 +19,7 @@ export class Donation {
 
     @Column({ nullable: true })
     notes: string;
+
+    @ManyToOne(() => Crisis, (crisis) => crisis.donations, { onDelete: 'SET NULL' })
+    crisis: Crisis;
 }
