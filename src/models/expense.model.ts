@@ -1,25 +1,26 @@
 "use strict";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, Index } from "typeorm";
 import { User } from "./user.model";
+import { InventoryItem } from "./inventoryItem.model";
 
 @Entity()
 export class Expense {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ type: 'decimal', precision: 12, scale: 2 })
-    amount: number;
+  @ManyToOne(() => InventoryItem, { nullable: true })
+  item?: InventoryItem; // Optional, might not be linked to an inventory item
 
-    @CreateDateColumn()
-    @Index()  // Added index to date for faster range querying
-    date: Date;
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
+  amount: number;  // Amount spent
 
-    @Column({ type: 'text', nullable: true })
-    description: string;
+  @CreateDateColumn()
+  @Index()  // Added index to date for faster range querying
+  date: Date;
 
-    @ManyToOne(() => User, (user) => user.expenses, { nullable: true })
-    user: User;
+  @ManyToOne(() => User)
+  user: User;  // The user who created the expense (admin or volunteer)
 
-    @Column({ nullable: true })
-    notes: string;
+  @Column({ nullable: true })
+  notes: string; // Additional details about the expense
 }

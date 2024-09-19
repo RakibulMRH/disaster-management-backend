@@ -1,23 +1,21 @@
-// src/dtos/inventoryTransaction.dto.ts
-import { IsString, IsNotEmpty, IsOptional, IsEnum, IsNumber, Min } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-export class CreateInventoryTransactionDto {
-  @IsNumber()
-  @Min(1)
-  itemId!: number;
+export class InventoryTransactionDto {
+  @IsInt()
+  @IsNotEmpty()
+  itemId: number;
 
   @IsString()
-  @IsEnum(['donation', 'purchase', 'distribution'])
-  transactionType!: 'donation' | 'purchase' | 'distribution';
+  @IsNotEmpty()
+  transactionType: string; // 'add', 'remove', 'purchase'
 
   @IsNumber()
-  @Min(1)
-  quantity!: number;
+  @IsNotEmpty()
+  quantity: number;
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
-  unitPrice?: number;
+  cost?: number; // Only for purchases
 
   @IsOptional()
   @IsString()
