@@ -188,4 +188,48 @@ router.get('/', [authMiddleware], userController.getAllUsers);
  */
 router.get('/role/:role', [authMiddleware], userController.getAllUsersByRole);
 
+/**
+ * @swagger
+ * /users/request-password-reset:
+ *   post:
+ *     summary: Request password reset (send PIN via email)
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset PIN sent
+ */
+router.post('/request-password-reset', userController.requestPasswordReset);
+
+/**
+ * @swagger
+ * /users/reset-password:
+ *   post:
+ *     summary: Reset password using PIN
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pin:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successful
+ */
+router.post('/reset-password', userController.resetPassword);
+
 export default router;

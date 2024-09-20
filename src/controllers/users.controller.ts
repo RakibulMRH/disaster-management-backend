@@ -9,6 +9,14 @@ export class UserController {
 
   constructor() {
     this.userService = new UserService();
+    this.registerUser = this.registerUser.bind(this);
+    this.getUserById = this.getUserById.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
+    this.getAllUsers = this.getAllUsers.bind(this);
+    this.getAllUsersByRole = this.getAllUsersByRole.bind(this);
+    this.requestPasswordReset = this.requestPasswordReset.bind(this);
+    this.resetPassword = this.resetPassword.bind(this);
   }
 
   // Register a new user (Admin)
@@ -141,6 +149,27 @@ export class UserController {
       return res.status(400).json({ message: (error as Error).message });
     }
   };
- 
+  
+  // Request password reset and send PIN via email
+  async requestPasswordReset(req: Request, res: Response): Promise<Response> {
+    try {
+      const { email } = req.body;
+      await this.userService.requestPasswordReset(email);
+      return res.status(200).json({ message: 'Password reset PIN sent to your email.' });
+    } catch (error) {
+      return res.status(400).json({ message: (error as Error).message });
+    }
+  }
+
+  // Reset the password using PIN, username or email
+  async resetPassword(req: Request, res: Response): Promise<Response> {
+    try {
+      const { pin, newPassword, identifier } = req.body; // identifier can be either username or email
+      await this.userService.resetPassword(pin, newPassword, identifier);
+      return res.status(200).json({ message: 'Password has been reset successfully.' });
+    } catch (error) {
+      return res.status(400).json({ message: (error as Error).message });
+    }
+  }
 
 }

@@ -63,6 +63,10 @@ export class User {
 
     @OneToMany(() => Expense, (expense) => expense.user)
     expenses: Expense[];
-
-
+    
+    @Column({ type: 'varchar', nullable: true })
+    resetPasswordToken: string | null;
+  
+    @Column({ type: 'timestamp', nullable: true })
+    resetPasswordExpires: Date | null;
 }
