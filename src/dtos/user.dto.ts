@@ -51,6 +51,11 @@ export class UpdateUserDto {
 
     @IsString()
     @IsOptional()
-    password?: string;
+    currentPassword?: string;
+
+    @IsString()
+    @IsOptional()
+    newPassword?: string;
+     
   }
   

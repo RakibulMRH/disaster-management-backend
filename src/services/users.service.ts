@@ -1,7 +1,7 @@
 import { AppDataSource } from '../config/database.config';
 import { User } from '../models/user.model';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
 
 export class UserService {
   private userRepository = AppDataSource.getRepository(User);
@@ -28,9 +28,24 @@ export class UserService {
       throw new Error('User not found');
     }
 
-    if (updateUserDto.password) {
-      updateUserDto.password = await hash(updateUserDto.password, 10);  // Hash updated password if exists
+    if (updateUserDto.newPassword) {
+      const { currentPassword, newPassword } = updateUserDto;
+
+      // Check if current password is provided
+      if (!currentPassword) {
+        throw new Error('Current password is required to update the password');
+      }
+
+      // Compare current password with the stored password
+      const isMatch = await compare(currentPassword, user.password);
+      if (!isMatch) {
+        throw new Error('Current password is incorrect');
+      }
+
+      // Hash the new password
+      updateUserDto.newPassword = await hash(newPassword, 10);
     }
+
     Object.assign(user, updateUserDto);
     return await this.userRepository.save(user);
   }

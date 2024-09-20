@@ -106,7 +106,10 @@ router.get('/:id', userController.getUserById);
  *               email:
  *                 type: string
  *                 example: "janedoe@example.com"
- *               password:
+ *               currentPassword:
+ *                 type: string
+ *                 example: "oldpassword123"
+ *               newPassword:
  *                 type: string
  *                 example: "newpassword123"
  *     responses:
