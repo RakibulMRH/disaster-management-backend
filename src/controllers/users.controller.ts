@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { validate } from 'class-validator';
+import { AuthenticatedRequest } from '../middleware/auth.middleware';
 
 export class UserController {
   private userService: UserService;
@@ -10,9 +11,19 @@ export class UserController {
     this.userService = new UserService();
   }
 
-  // Register a new user (Admin or Volunteer)
-  registerUser = async (req: Request, res: Response) => {
+  // Register a new user (Admin)
+  registerUser = async (req: AuthenticatedRequest, res: Response) => {
     try {
+      const currentUser = req.user;
+      if (!currentUser) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+
+      // Only admin can register new users
+      if (currentUser.role !== 'Admin') {
+        return res.status(403).json({ message: 'You are not authorized to register new users' });
+      }
+
       const createUserDto = req.body as CreateUserDto;
 
       // Validate input data
@@ -28,8 +39,8 @@ export class UserController {
     }
   };
 
-  // Get a user by ID
-  getUserById = async (req: Request, res: Response) => {
+  // Get a user by ID 
+  getUserById = async (req: AuthenticatedRequest, res: Response) => {
     try {
       const userId = parseInt(req.params.id);
       const user = await this.userService.getUserById(userId);
@@ -43,11 +54,15 @@ export class UserController {
   };
 
   // Update user details (only admin or the user can update)
-  updateUser = async (req: Request, res: Response) => {
+  updateUser = async (req: AuthenticatedRequest, res: Response) => {
     try {
       const userId = parseInt(req.params.id);
       const updateUserDto = req.body as UpdateUserDto;
-      const currentUser = req.user!; 
+      const currentUser = req.user;
+
+      if (!currentUser) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
 
       // Only allow update if the user is admin or the same user
       if (currentUser.role !== 'Admin' && currentUser.id !== userId) {
@@ -64,14 +79,18 @@ export class UserController {
     }
   };
 
-  // Delete a user (only admin or the user can delete)
-  deleteUser = async (req: Request, res: Response) => {
+  // Delete a user (only admin can delete)
+  deleteUser = async (req: AuthenticatedRequest, res: Response) => {
     try {
       const userId = parseInt(req.params.id);
-      const currentUser = req.user!;
+      const currentUser = req.user;
 
-      // Only allow delete if the user is admin or the same user
-      if (currentUser.role !== 'Admin' && currentUser.id !== userId) {
+      if (!currentUser) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+
+      // Only allow delete if the user is admin
+      if (currentUser.role !== 'Admin') {
         return res.status(403).json({ message: 'You are not authorized to delete this user' });
       }
 
@@ -83,9 +102,12 @@ export class UserController {
   };
 
   // Get all users (admin action)
-  getAllUsers = async (req: Request, res: Response) => {
+  getAllUsers = async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const currentUser = req.user!; 
+      const currentUser = req.user;
+      if (!currentUser) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
 
       // Only admin can view all users
       if (currentUser.role !== 'Admin') {
@@ -98,4 +120,27 @@ export class UserController {
       return res.status(400).json({ message: (error as Error).message });
     }
   };
+
+  //get all user by role
+  getAllUsersByRole = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const currentUser = req.user;
+      if (!currentUser) {
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+
+      // Only admin can view all users
+      if (currentUser.role !== 'Admin') {
+        return res.status(403).json({ message: 'You are not authorized to view all users' });
+      }
+
+      const role = req.params.role;
+      const users = await this.userService.getAllUsersByRole(role);
+      return res.status(200).json(users);
+    } catch (error) {
+      return res.status(400).json({ message: (error as Error).message });
+    }
+  };
+ 
+
 }

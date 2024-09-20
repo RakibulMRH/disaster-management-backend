@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/users.controller';
-
+import { authMiddleware } from '../middleware/auth.middleware';
+import { roleMiddleware } from '../middleware/role.middleware';
 const router = Router();
 const userController = new UserController();
 
@@ -15,7 +16,7 @@ const userController = new UserController();
  * @swagger
  * /users/register:
  *   post:
- *     summary: Register a new user (Admin or Volunteer)
+ *     summary: Register a new user (Admin)
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -52,7 +53,7 @@ const userController = new UserController();
  *       400:
  *         description: Validation error
  */
-router.post('/register', userController.registerUser);
+router.post('/register', [authMiddleware, roleMiddleware(['Admin'])], userController.registerUser);
 
 /**
  * @swagger
@@ -118,7 +119,7 @@ router.get('/:id', userController.getUserById);
  *       404:
  *         description: User not found
  */
-router.put('/:id', userController.updateUser);
+router.put('/:id', [authMiddleware], userController.updateUser);
 
 /**
  * @swagger
@@ -139,7 +140,7 @@ router.put('/:id', userController.updateUser);
  *       404:
  *         description: User not found
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', [authMiddleware, roleMiddleware(['Admin'])], userController.deleteUser);
 
 /**
  * @swagger
@@ -157,6 +158,31 @@ router.delete('/:id', userController.deleteUser);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', userController.getAllUsers);
+router.get('/', [authMiddleware], userController.getAllUsers);
+
+/**
+ * @swagger
+ * /users/role/{role}:
+ *   get:
+ *     summary: Get all users by role
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: role
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Role of the users to retrieve
+ *     responses:
+ *       200:
+ *         description: A list of users by role
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+router.get('/role/:role', [authMiddleware], userController.getAllUsersByRole);
 
 export default router;

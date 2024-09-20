@@ -9,7 +9,7 @@ import { Donation } from '../models/donation.model';
 import { InventoryItem } from '../models/inventoryItem.model';
 import { InventoryTransaction } from '../models/inventoryTransaction.model';
 import { Expense } from '../models/expense.model';
-import { VolunteerAssignment } from '../models/volunteerAssignment.model';
+import { VolunteerAssignmentLog } from '../models/volunteerAssignmentLog.model';
 import { Assignment } from '../models/assignment.model';
 
 // Load .env file
@@ -24,7 +24,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'disaster_management',
   synchronize: true,  
   logging: false,
-  entities: [User, Crisis, Donation, InventoryItem, InventoryTransaction, Expense, VolunteerAssignment, Assignment], // Use the entity classes directly
+  entities: [User, Crisis, Donation, InventoryItem, InventoryTransaction, Expense, VolunteerAssignmentLog, Assignment], // Use the entity classes directly
   migrations: ['src/migrations/**/*.ts'],
   subscribers: ['src/subscribers/**/*.ts'],
 });

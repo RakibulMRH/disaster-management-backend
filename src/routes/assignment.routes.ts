@@ -1,11 +1,11 @@
+// src/routes/assignment.routes.ts
 import { Router } from 'express';
 import { AssignmentController } from '../controllers/assignments.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { roleMiddleware } from '../middleware/role.middleware';
 
 const router = Router();
-const assignmentController = new AssignmentController(); // Instantiate AssignmentController
-
+const assignmentController = new AssignmentController();
 
 /**
  * @swagger
@@ -29,25 +29,19 @@ const assignmentController = new AssignmentController(); // Instantiate Assignme
  *           schema:
  *             type: object
  *             required:
- *               - taskDescription
- *               - crisisId
+ *               - name
+ *               - description
  *               - requiredVolunteers
  *             properties:
- *               taskDescription:
+ *               name:
  *                 type: string
- *                 example: Distribute food supplies
- *               crisisId:
- *                 type: integer
- *                 example: 1
- *               location:
+ *                 example: "Disaster Relief"
+ *               description:
  *                 type: string
- *                 example: Dhaka
+ *                 example: "Provide support for flood victims"
  *               requiredVolunteers:
  *                 type: integer
- *                 example: 5
- *               status:
- *                 type: string
- *                 example: assigned
+ *                 example: 10
  *     responses:
  *       201:
  *         description: Assignment created successfully
@@ -58,30 +52,32 @@ const assignmentController = new AssignmentController(); // Instantiate Assignme
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Assignment created successfully
+ *                   example: "Assignment created successfully"
  *                 assignment:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
  *                       example: 1
- *                     taskDescription:
+ *                     name:
  *                       type: string
- *                       example: Distribute food supplies
- *                     crisisId:
- *                       type: integer
- *                       example: 1
- *                     location:
+ *                       example: "Disaster Relief"
+ *                     description:
  *                       type: string
- *                       example: Dhaka
+ *                       example: "Provide support for flood victims"
  *                     requiredVolunteers:
  *                       type: integer
- *                       example: 5
+ *                       example: 10
+ *                     assignedVolunteers:
+ *                       type: integer
+ *                       example: 0
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
  *                     status:
  *                       type: string
- *                       example: assigned
+ *                       example: "recruiting"
  */
-
 router.post('/', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.createAssignment);
 
 /**
@@ -95,9 +91,9 @@ router.post('/', [authMiddleware, roleMiddleware(['Admin'])], assignmentControll
  *     parameters:
  *       - in: path
  *         name: assignmentId
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
  *         description: The assignment ID
  *     responses:
  *       200:
@@ -109,22 +105,28 @@ router.post('/', [authMiddleware, roleMiddleware(['Admin'])], assignmentControll
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Volunteer assigned successfully
- *                 volunteerAssignment:
+ *                   example: "Volunteer assigned successfully"
+ *                 assignment:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
  *                       example: 1
- *                     volunteerId:
+ *                     name:
+ *                       type: string
+ *                       example: "Disaster Relief"
+ *                     description:
+ *                       type: string
+ *                       example: "Provide support for flood victims"
+ *                     requiredVolunteers:
  *                       type: integer
- *                       example: 5
- *                     assignmentId:
+ *                       example: 10
+ *                     assignedVolunteers:
  *                       type: integer
- *                       example: 3
+ *                       example: 1
  *                     status:
  *                       type: string
- *                       example: active
+ *                       example: "recruiting"
  *       400:
  *         description: No more volunteers are needed
  *         content:
@@ -134,25 +136,145 @@ router.post('/', [authMiddleware, roleMiddleware(['Admin'])], assignmentControll
  *               properties:
  *                 message:
  *                   type: string
- *                   example: No more volunteers are needed for this assignment
+ *                   example: "No more volunteers are needed"
  */
-
-router.post('/:assignmentId/join', [authMiddleware, roleMiddleware(['Volunteer'])], assignmentController.assignVolunteer);
+router.post('/:assignmentId/join', [authMiddleware, roleMiddleware(['Volunteer'])], assignmentController.joinAssignment);
 
 /**
  * @swagger
- * /assignments/{id}:
- *   patch:
- *     summary: Update an existing assignment
+ * /assignments/{assignmentId}:
+ *   delete:
+ *     summary: Delete an assignment
+ *     tags: [Assignments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The assignment ID
+ *     responses:
+ *       200:
+ *         description: Assignment deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Assignment deleted successfully"
+ *       404:
+ *         description: Assignment not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Assignment not found"
+ */
+router.delete('/:assignmentId', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.deleteAssignment);
+
+/**
+ * @swagger
+ * /assignments/recruiting:
+ *   get:
+ *     summary: Get all recruiting assignments for volunteers
+ *     tags: [Assignments]
+ *     responses:
+ *       200:
+ *         description: List of recruiting assignments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "Disaster Relief"
+ *                   description:
+ *                     type: string
+ *                     example: "Provide support for flood victims"
+ *                   requiredVolunteers:
+ *                     type: integer
+ *                     example: 10
+ *                   assignedVolunteers:
+ *                     type: integer
+ *                     example: 5
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   status:
+ *                     type: string
+ *                     example: "recruiting"
+ */
+router.get('/recruiting', authMiddleware, assignmentController.getAllRecruitingAssignments);
+
+/**
+ * @swagger
+ * /assignments/admin:
+ *   get:
+ *     summary: Get all assignments for admin
+ *     tags: [Assignments]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of assignments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "Disaster Relief"
+ *                   description:
+ *                     type: string
+ *                     example: "Provide support for flood victims"
+ *                   requiredVolunteers:
+ *                     type: integer
+ *                     example: 10
+ *                   assignedVolunteers:
+ *                     type: integer
+ *                     example: 5
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   status:
+ *                     type: string
+ *                     example: "recruiting"
+ */
+router.get('/admin', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.getAllAssignmentsForAdmin);
+
+/**
+ * @swagger
+ * /assignments/{id}/status:
+ *   put:
+ *     summary: Update assignment status
  *     tags: [Assignments]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
  *         description: The assignment ID
  *     requestBody:
  *       required: true
@@ -161,58 +283,45 @@ router.post('/:assignmentId/join', [authMiddleware, roleMiddleware(['Volunteer']
  *           schema:
  *             type: object
  *             properties:
- *               volunteerId:
- *                 type: integer
- *                 example: 2
- *               taskDescription:
- *                 type: string
- *                 example: "Coordinate medical relief"
  *               status:
  *                 type: string
- *                 example: "in_progress"
+ *                 example: "active"
  *     responses:
  *       200:
- *         description: Assignment updated successfully
- *       404:
- *         description: Assignment not found
+ *         description: Assignment status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Assignment status updated successfully"
+ *                 assignment:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Disaster Relief"
+ *                     description:
+ *                       type: string
+ *                       example: "Provide support for flood victims"
+ *                     requiredVolunteers:
+ *                       type: integer
+ *                       example: 10
+ *                     assignedVolunteers:
+ *                       type: integer
+ *                       example: 5
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     status:
+ *                       type: string
+ *                       example: "active"
  */
-router.patch('/:id', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.updateAssignment);
-
-/**
- * @swagger
- * /assignments:
- *   get:
- *     summary: Get all assignments
- *     tags: [Assignments]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: A list of assignments
- */
-router.get('/', [authMiddleware, roleMiddleware(['Admin', 'Volunteer'])], assignmentController.getAssignments);
-
-/**
- * @swagger
- * /assignments/{id}:
- *   delete:
- *     summary: Delete an assignment
- *     tags: [Assignments]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The assignment ID
- *     responses:
- *       204:
- *         description: Assignment deleted successfully
- *       404:
- *         description: Assignment not found
- */
-router.delete('/:id', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.deleteAssignment);
+router.put('/:id/status', [authMiddleware, roleMiddleware(['Admin'])], assignmentController.updateAssignmentStatus);
 
 export default router;

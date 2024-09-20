@@ -1,11 +1,11 @@
 "use strict";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, Unique, Index } from "typeorm";
 import { IsEmail } from "class-validator";
-import { VolunteerAssignment } from "./volunteerAssignment.model";
+import { VolunteerAssignmentLog } from "./volunteerAssignmentLog.model";
 import { Crisis } from "./crisis.model";
 import { InventoryTransaction } from "./inventoryTransaction.model";
 import { Expense } from "./expense.model";
-import { Assignment } from "./assignment.model";
+import { Assignment } from "./assignment.model"; 
 
 @Entity()
 @Unique(['username', 'email'])
@@ -45,11 +45,12 @@ export class User {
     @Column({ default: false })
     isVerified: boolean;
 
-    @OneToMany(() => VolunteerAssignment, (assignment) => assignment.volunteer)
-    assignments: VolunteerAssignment[];
-
-    @OneToMany(() => Assignment, (assignment) => assignment.assignedByAdmin)
-    assignedTasks: Assignment[];
+    // Status for user (assigned/unassigned/completed)
+    @Column({ type: 'varchar', default: 'unassigned' })
+    status: string;
+     
+    @OneToMany(() => VolunteerAssignmentLog, (assignment) => assignment.user)
+    assignments: VolunteerAssignmentLog[];
 
     @OneToMany(() => Crisis, (crisis) => crisis.reportedByUser)
     reportedCrises: Crisis[];
@@ -62,4 +63,6 @@ export class User {
 
     @OneToMany(() => Expense, (expense) => expense.user)
     expenses: Expense[];
+
+
 }

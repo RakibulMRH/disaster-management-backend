@@ -48,4 +48,9 @@ export class UserService {
   async getAllUsers(): Promise<User[]> {
     return await this.userRepository.find();
   }
+
+  // Get all users by role
+  async getAllUsersByRole(role: string): Promise<User[]> {
+    return await this.userRepository.find({ where: { role } });
+  }
 }

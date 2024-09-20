@@ -1,62 +1,91 @@
+// src/services/assignment.service.ts
 import { AppDataSource } from '../config/database.config';
 import { Assignment } from '../models/assignment.model';
-import { VolunteerAssignment } from '../models/volunteerAssignment.model';
+import { VolunteerAssignmentLog } from '../models/volunteerAssignmentLog.model';
+import { AssignVolunteerDto, CreateAssignmentDto } from '../dtos/assignment.dto';
 import { User } from '../models/user.model';
-import { CreateAssignmentDto, UpdateAssignmentDto } from '../dtos/assignment.dto';
 
 export class AssignmentService {
   private assignmentRepository = AppDataSource.getRepository(Assignment);
-  private volunteerAssignmentRepository = AppDataSource.getRepository(VolunteerAssignment);
+  private volunteerLogRepository = AppDataSource.getRepository(VolunteerAssignmentLog);
   private userRepository = AppDataSource.getRepository(User);
 
-  // Create a new assignment (Admin only)
+  // Create a new assignment
   async createAssignment(createAssignmentDto: CreateAssignmentDto): Promise<Assignment> {
-    const assignment = this.assignmentRepository.create(createAssignmentDto);
+    const assignment = this.assignmentRepository.create({
+      ...createAssignmentDto,
+      assignedVolunteers: 0,
+      createdAt: new Date(),
+      status: 'recruiting',
+    });
     return await this.assignmentRepository.save(assignment);
   }
 
-  // Assign a volunteer to an assignment
-  async assignVolunteer(assignmentId: number, userId: number): Promise<VolunteerAssignment | null> {
-    const assignment = await this.assignmentRepository.findOne({
-      where: { id: assignmentId },
-      relations: ['volunteers'],
+  // Volunteer joins an assignment
+  async assignVolunteer(assignVolunteerDto: AssignVolunteerDto): Promise<Assignment> {
+    const assignment = await this.assignmentRepository.findOneBy({
+      id: assignVolunteerDto.assignmentId,
     });
+
     if (!assignment) throw new Error('Assignment not found');
-
-    const volunteer = await this.userRepository.findOne({ where: { id: userId } });
-    if (!volunteer) throw new Error('Volunteer not found');
-
-    // Check if there are enough spots for more volunteers
-    if (assignment.volunteers.length >= assignment.requiredVolunteers) {
-      throw new Error('No more volunteers are needed for this assignment');
+    if (assignment.assignedVolunteers >= assignment.requiredVolunteers) {
+      throw new Error('No more volunteers needed for this assignment');
     }
 
-    const volunteerAssignment = this.volunteerAssignmentRepository.create({
-      volunteer,
-      assignment,
-      dateAssigned: new Date(),
-      status: 'active',
+    // Check if the user status is "unassigned"
+    const user = await this.userRepository.findOneBy({ id: assignVolunteerDto.userId });
+    if (!user) throw new Error('User not found');
+    if (user.status !== 'unassigned') {
+      throw new Error('User is not available for assignment');
+    }
+
+    const volunteerLog = this.volunteerLogRepository.create({
+      user: user,
+      assignment: assignment,
+      assignedAt: new Date(),
     });
 
-    return await this.volunteerAssignmentRepository.save(volunteerAssignment);
+    await this.volunteerLogRepository.save(volunteerLog);
+
+    // Update the number of assigned volunteers
+    assignment.assignedVolunteers += 1;
+
+    // Update the status if the required number of volunteers is met
+    if (assignment.assignedVolunteers >= assignment.requiredVolunteers) {
+      assignment.status = 'active';
+    }
+
+    await this.assignmentRepository.save(assignment);
+
+    return assignment;
   }
 
-  // Other assignment service functions
-  async updateAssignment(id: number, updateAssignmentDto: UpdateAssignmentDto): Promise<Assignment | null> {
-    const assignment = await this.assignmentRepository.findOne({ where: { id } });
-    if (!assignment) throw new Error('Assignment not found');
-
-    Object.assign(assignment, updateAssignmentDto);
-    return await this.assignmentRepository.save(assignment);
-  }
-
-  async getAllAssignments(): Promise<Assignment[]> {
-    return await this.assignmentRepository.find({ relations: ['volunteers'] });
-  }
-
-  async deleteAssignment(id: number): Promise<void> {
-    const assignment = await this.assignmentRepository.findOne({ where: { id } });
+  // Delete an assignment
+  async deleteAssignment(assignmentId: number): Promise<void> {
+    const assignment = await this.assignmentRepository.findOne({ where: { id: assignmentId } });
     if (!assignment) throw new Error('Assignment not found');
     await this.assignmentRepository.remove(assignment);
+  }
+
+  // Get all assignments for volunteers
+  async getAllRecruitingAssignments(): Promise<Assignment[]> {
+    return await this.assignmentRepository.find({ where: { status: 'recruiting' } });
+  }
+
+  // Get all assignments for admin
+  async getAllAssignmentsForAdmin(): Promise<Assignment[]> {
+    const assignments = await this.assignmentRepository.find();
+    return assignments.sort((a, b) => {
+      const statusOrder = ['recruiting', 'active', 'completed', 'cancelled'];
+      return statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+    });
+  }
+
+  // Update assignment status
+  async updateAssignmentStatus(assignmentId: number, status: string): Promise<Assignment> {
+    const assignment = await this.assignmentRepository.findOne({ where: { id: assignmentId } });
+    if (!assignment) throw new Error('Assignment not found');
+    assignment.status = status;
+    return await this.assignmentRepository.save(assignment);
   }
 }

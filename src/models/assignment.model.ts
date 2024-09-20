@@ -1,8 +1,6 @@
-"use strict";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { User } from './user.model';
-import { Crisis } from './crisis.model';
-import { VolunteerAssignment } from './volunteerAssignment.model';
+// src/models/assignment.model.ts
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import { VolunteerAssignmentLog } from './volunteerAssignmentLog.model';
 
 @Entity()
 export class Assignment {
@@ -10,24 +8,23 @@ export class Assignment {
   id: number;
 
   @Column()
-  taskDescription: string;
+  name: string;
 
   @Column({ nullable: true })
-  location: string;
+  description: string;
 
-  @Column({ type: 'varchar', default: 'assigned' })
-  status: string;
-
-  @Column({ type: 'int', default: 1 })  // Indicates how many volunteers are needed
+  @Column()
   requiredVolunteers: number;
 
-  @ManyToOne(() => User, (user) => user.assignedTasks, { onDelete: 'CASCADE' })
-  assignedByAdmin: User;
+  @Column({ default: 0 })
+  assignedVolunteers: number;
 
-  @ManyToOne(() => Crisis, (crisis) => crisis, { nullable: true, onDelete: 'SET NULL' })
-  crisis: Crisis;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  // The relation that tracks which volunteers have been assigned or joined
-  @OneToMany(() => VolunteerAssignment, (volunteerAssignment) => volunteerAssignment.assignment)
-  volunteers: VolunteerAssignment[];
+  @Column({ nullable: true, default: 'recruiting' })  
+  status: string; // 'active' | 'completed' | 'cancelled' | 'reqruiting'
+ 
+  @OneToMany(() => VolunteerAssignmentLog, (volunteerAssignmentLog) => volunteerAssignmentLog.assignment)
+  volunteerAssignments: VolunteerAssignmentLog[];
 }

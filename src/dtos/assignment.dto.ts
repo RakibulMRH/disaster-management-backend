@@ -1,51 +1,47 @@
 // src/dtos/assignment.dto.ts
-import { IsString, IsNotEmpty, IsOptional, IsEnum, IsNumber, Min } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEnum, IsNumber, Min, IsInt } from 'class-validator';
 
-export class CreateAssignmentDto {
-  @IsNumber()
+ export class CreateAssignmentDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  description: string;
+
+  @IsString()
+  location: string;
+
+  @IsInt()
   @Min(1)
-  volunteerId!: number;
+  requiredVolunteers: number;
+} 
 
+export class AssignVolunteerDto {
+  @IsInt()
+  userId!: number;
+
+  @IsInt()
+  assignmentId!: number;
+}
+
+
+export class UpdateAssignmentDto {
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  crisisId?: number;
+  @IsString()
+  title?: string;
 
   @IsOptional()
   @IsString()
-  taskDescription?: string;
+  description?: string;
 
   @IsOptional()
   @IsString()
   location?: string;
 
-  @IsString()
-  @IsEnum(['assigned', 'in_progress', 'completed'])
-  status!: 'assigned' | 'in_progress' | 'completed';
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  requiredVolunteers?: number;
 }
-
-export class UpdateAssignmentDto {
-    @IsOptional()
-    @IsNumber()
-    @Min(1)
-    volunteerId?: number;
-  
-    @IsOptional()
-    @IsNumber()
-    @Min(1)
-    crisisId?: number;
-  
-    @IsOptional()
-    @IsString()
-    taskDescription?: string;
-  
-    @IsOptional()
-    @IsString()
-    location?: string;
-  
-    @IsOptional()
-    @IsString()
-    @IsEnum(['assigned', 'in_progress', 'completed'])
-    status?: 'assigned' | 'in_progress' | 'completed';
-  }
   
