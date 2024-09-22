@@ -139,4 +139,29 @@ router.get('/total-fund/:crisisId', (req, res) => donationController.getTotalFun
  */
 router.get('/list/:crisisId', (req, res) => donationController.getAllDonations(req, res));
 
+/**
+ * @swagger
+ * /donations/total:
+ *   get:
+ *     summary: Get all donations funds for all crises
+ *     tags: [Donations]
+ *     responses:
+ *       200:
+ *         description: List of all donations funds for all crises
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   crisisId:
+ *                     type: integer
+ *                     example: 1
+ *                   totalFund:
+ *                     type: number
+ *                     example: 5000
+ */
+router.get('/total', (req, res) => donationController.getAllDonationsFunds(req, res));
+
 export default router;

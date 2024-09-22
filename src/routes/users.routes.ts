@@ -186,7 +186,7 @@ router.get('/', [authMiddleware], userController.getAllUsers);
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/role/:role', [authMiddleware], userController.getAllUsersByRole);
+router.get('/role/:role', userController.getAllUsersByRole);
 
 /**
  * @swagger

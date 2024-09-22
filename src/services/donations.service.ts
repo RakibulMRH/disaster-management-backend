@@ -41,4 +41,14 @@ export class DonationService {
       relations: ['crisis'],
     });
   }
+
+  // Get the total sum of all donations
+  async getAllDonationsFunds(): Promise<number> {
+    const result = await this.donationRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount)', 'totalFund')
+      .getRawOne();
+  
+    return parseFloat(result.totalFund);
+  }
 }

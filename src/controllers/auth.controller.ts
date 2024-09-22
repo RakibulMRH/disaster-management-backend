@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response) => {
   createUserDto.name = body.name;
   createUserDto.email = body.email;  // Optional fields
   createUserDto.phoneNumber = body.phoneNumber;  // Optional fields
-  createUserDto.age = body.age;  // Optional fields
+  createUserDto.age = body.age;   
 
   // Validate the DTO
   const errors = await validate(createUserDto);
@@ -44,7 +44,6 @@ export const register = async (req: Request, res: Response) => {
 
   return res.status(201).json({ message: 'User registered successfully', newUser });
 };
-
 // Login function
 export const login = async (req: Request, res: Response) => {
   const body = req.body;
@@ -73,5 +72,6 @@ export const login = async (req: Request, res: Response) => {
   // Generate JWT token
   const token = AuthService.generateJwt(user);
 
-  return res.status(200).json({ message: 'Login successful', token });
+  // Return the whole user object along with the token
+  return res.status(200).json({ message: 'Login successful', token, user });
 };

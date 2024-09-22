@@ -133,14 +133,6 @@ export class UserController {
   getAllUsersByRole = async (req: AuthenticatedRequest, res: Response) => {
     try {
       const currentUser = req.user;
-      if (!currentUser) {
-        return res.status(401).json({ message: 'User not authenticated' });
-      }
-
-      // Only admin can view all users
-      if (currentUser.role !== 'Admin') {
-        return res.status(403).json({ message: 'You are not authorized to view all users' });
-      }
 
       const role = req.params.role;
       const users = await this.userService.getAllUsersByRole(role);

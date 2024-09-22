@@ -44,4 +44,14 @@ export class DonationController {
       return res.status(500).json({ message: (error as Error).message });
     }
   }
+
+  // Get all donations funds for all crises
+  async getAllDonationsFunds(req: Request, res: Response) {
+    try {
+      const donationsFunds = await this.donationService.getAllDonationsFunds();
+      return res.status(200).json(donationsFunds);
+    } catch (error) {
+      return res.status(500).json({ message: (error as Error).message });
+    }
+  }
 }

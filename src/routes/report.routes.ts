@@ -142,6 +142,6 @@ router.get('/inventory', authMiddleware, roleMiddleware(['Admin']), reportContro
  *                   totalExpenses:
  *                     type: number
  */
-router.get('/daily-funds-expenses', authMiddleware, reportController.getDailyFundsAndExpenses);
+router.get('/daily-funds-expenses', reportController.getDailyFundsAndExpenses);
 
 export default router;

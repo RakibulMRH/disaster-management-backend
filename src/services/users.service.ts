@@ -70,7 +70,7 @@ export class UserService {
 
   // Get all users by role
   async getAllUsersByRole(role: string): Promise<User[]> {
-    return await this.userRepository.find({ where: { role } });
+    return await this.userRepository.find({ where: { role, isVerified: true } });
   }
 
   // Method to generate and send reset PIN

@@ -24,20 +24,35 @@ router.get('/', (req, res) => crisisController.listCrises(req, res));
  *     summary: Create a new crisis (with optional image)
  *     tags: [Crises]
  *     requestBody:
+ *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - severity
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Title of the crisis
  *               description:
  *                 type: string
- *               severity:
+ *                 description: Description of the crisis
+ *               location:
  *                 type: string
- *               image:
+ *                 description: Location of the crisis
+ *               imageUrl:
  *                 type: string
  *                 format: binary
+ *                 description: Image URL of the crisis
+ *               severity:
+ *                 type: string
+ *                 enum: [low, medium, high, critical]
+ *                 description: Severity level of the crisis
+ *               requiredHelp:
+ *                 type: string
+ *                 description: Type of help required
  *     responses:
  *       201:
  *         description: Crisis created successfully (pending approval)
