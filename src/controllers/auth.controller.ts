@@ -62,6 +62,10 @@ export const login = async (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
+  
+  if (!user.isVerified) {
+    return res.status(403).json({ message: 'User is not verified' });
+  }
 
   // Validate the password
   const isPasswordValid = await AuthService.validatePassword(loginDto.password, user.password);
