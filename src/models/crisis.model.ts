@@ -48,5 +48,8 @@ export class Crisis {
     @Column({ nullable: true })
     dateApproved: Date;
 
+    @Column({ nullable: true })
+    goal: number;
+
     
 }

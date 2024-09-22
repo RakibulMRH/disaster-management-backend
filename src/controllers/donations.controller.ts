@@ -24,13 +24,13 @@ export class DonationController {
   }
 
   // Get the total fund amount for a specific crisis
-  async getTotalFund(req: Request, res: Response) {
+  async getTotalFund(req: Request, res: Response): Promise<void> {
     try {
       const crisisId = parseInt(req.params.crisisId, 10);
-      const totalFund = await this.donationService.getTotalFund(crisisId);
-      return res.status(200).json({ totalFund });
+      const { totalFund, goal } = await this.donationService.getTotalFund(crisisId);
+      res.status(200).json({ totalFund, goal });
     } catch (error) {
-      return res.status(500).json({ message: (error as Error).message });
+      res.status(400).json({ message: (error as Error).message });
     }
   }
 
@@ -50,6 +50,16 @@ export class DonationController {
     try {
       const donationsFunds = await this.donationService.getAllDonationsFunds();
       return res.status(200).json(donationsFunds);
+    } catch (error) {
+      return res.status(500).json({ message: (error as Error).message });
+    }
+  }
+
+  // Get all donations list for all crises
+  async getAllDonationsList(req: Request, res: Response) {
+    try {
+      const donationsList = await this.donationService.getAllDonationsList();
+      return res.status(200).json(donationsList);
     } catch (error) {
       return res.status(500).json({ message: (error as Error).message });
     }

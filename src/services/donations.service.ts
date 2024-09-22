@@ -24,14 +24,23 @@ export class DonationService {
   }
 
   // Get the total fund for a specific crisis
-  async getTotalFund(crisisId: number): Promise<number> {
-    const result = await this.donationRepository
+  async getTotalFund(crisisId: number): Promise<{ totalFund: number, goal: number }> {
+    const totalFundResult = await this.donationRepository
       .createQueryBuilder('donation')
       .select('SUM(donation.amount)', 'total')
       .where('donation.crisisId = :crisisId', { crisisId })
       .getRawOne();
-    
-    return parseFloat(result.total);
+
+    const crisis = await this.crisisRepository.findOneBy({ id: crisisId });
+
+    if (!crisis) {
+      throw new Error('Crisis not found');
+    }
+
+    return {
+      totalFund: parseFloat(totalFundResult.total),
+      goal: crisis.goal
+    };
   }
 
   // Get all donations for a specific crisis
@@ -50,5 +59,12 @@ export class DonationService {
       .getRawOne();
   
     return parseFloat(result.totalFund);
+  }
+
+  // Get all donations list for all crises
+  async getAllDonationsList(): Promise<Donation[]> {
+    return await this.donationRepository.find({
+      relations: ['crisis'],
+    });
   }
 }

@@ -25,6 +25,9 @@ export class CreateCrisisDto {
   @IsOptional()
   @IsString()
   requiredHelp?: string;
+ 
+  @IsString()
+  goal: number;
 }
 
 export class UpdateCrisisDto {
@@ -57,5 +60,9 @@ export class UpdateCrisisDto {
     @IsString()
     @IsEnum(['pending', 'approved', 'resolved', 'rejected'])
     status?: 'pending' | 'approved' | 'resolved' | 'rejected';
+
+    @IsOptional()
+    @IsString()
+    goal: number;
   }
   
