@@ -4,6 +4,7 @@
   "description": "nodejs backend",
   "main": "index.js",
   "scripts": {
+    "start": "node -r tsconfig-paths/register dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts"
   },

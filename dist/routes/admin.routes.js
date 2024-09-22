@@ -179,6 +179,60 @@ router.put('/crises/:id/approve', [auth_middleware_1.authMiddleware, (0, role_mi
 /**
  * @swagger
  * /admin/crises/{id}:
+ *   put:
+ *     summary: Update a crisis (Admin only)
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         description: The ID of the crisis to update
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: 'Flood in Region Y'
+ *               severity:
+ *                 type: string
+ *                 example: 'medium'
+ *               status:
+ *                 type: string
+ *                 example: 'pending'
+ *     responses:
+ *       200:
+ *         description: Crisis updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Crisis updated successfully'
+ *                 crisis:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     title:
+ *                       type: string
+ *                       example: 'Flood in Region Y'
+ *                     status:
+ *                       type: string
+ *                       example: 'pending'
+ */
+router.put('/crises/:id', [auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(['Admin'])], admin_controller_1.AdminController.updateCrisis);
+/**
+ * @swagger
+ * /admin/crises/{id}:
  *   delete:
  *     summary: Delete a crisis (Admin only)
  *     tags: [Admin]

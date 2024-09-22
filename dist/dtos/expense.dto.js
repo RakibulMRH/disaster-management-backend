@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateExpenseDto = void 0;
-// src/dtos/expense.dto.ts
 const class_validator_1 = require("class-validator");
 class CreateExpenseDto {
 }
@@ -20,6 +19,16 @@ __decorate([
     (0, class_validator_1.Min)(0.01),
     __metadata("design:type", Number)
 ], CreateExpenseDto.prototype, "amount", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateExpenseDto.prototype, "itemId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateExpenseDto.prototype, "userId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

@@ -8,19 +8,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CrisisController = void 0;
 const crisis_service_1 = require("../services/crisis.service");
+const multer_1 = __importDefault(require("multer"));
+const sharp_1 = __importDefault(require("sharp"));
+// Multer storage and file filter setup
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+    }
+    else {
+        cb(new Error('Invalid image file'));
+    }
+};
+const upload = (0, multer_1.default)({ storage, fileFilter, limits: { fileSize: 2 * 1024 * 1024 } }); // 2MB max size
 class CrisisController {
     constructor() {
+        // Create a crisis with an optional image
+        this.createCrisis = [
+            upload.single('image'), // Handle image upload
+            (req, res) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const crisisData = req.body;
+                    if (req.file) {
+                        const imagePath = `uploads/compressed-${req.file.filename}`;
+                        // Resize and compress the image using Sharp
+                        yield (0, sharp_1.default)(req.file.path)
+                            .resize(800)
+                            .jpeg({ quality: 80 })
+                            .toFile(imagePath);
+                        // Include image URL in crisis data
+                        crisisData.imageUrl = imagePath;
+                    }
+                    const createdCrisis = yield this.crisisService.createCrisis(crisisData);
+                    return res.status(201).json({
+                        message: 'Crisis created successfully. Pending approval from admin.',
+                        crisis: createdCrisis,
+                    });
+                }
+                catch (error) {
+                    return res.status(400).json({ message: error.message });
+                }
+            })
+        ];
         this.crisisService = new crisis_service_1.CrisisService(); // Instantiate CrisisService
     }
-    // Anyone can list all crises
-    static listCrises(req, res) {
+    // List all approved crises
+    listCrises(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const crisisService = new crisis_service_1.CrisisService(); // Instantiate the service
-                const crises = yield crisisService.getAllCrises();
+                const crises = yield this.crisisService.getAllCrises();
                 return res.status(200).json(crises);
             }
             catch (error) {
@@ -28,31 +77,13 @@ class CrisisController {
             }
         });
     }
-    // Anonymous users can create a crisis (Admin approval required for it to become visible)
-    static createCrisis(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const crisisData = req.body;
-                const crisisService = new crisis_service_1.CrisisService(); // Instantiate the service
-                const createdCrisis = yield crisisService.createCrisis(crisisData);
-                return res.status(201).json({
-                    message: 'Crisis created successfully. Pending approval from admin.',
-                    crisis: createdCrisis,
-                });
-            }
-            catch (error) {
-                return res.status(400).json({ message: error.message });
-            }
-        });
-    }
-    // Admin can update a crisis (e.g., approving or changing status)
-    static updateCrisis(req, res) {
+    // Admin can update a crisis
+    updateCrisis(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const crisisId = parseInt(req.params.id, 10);
                 const crisisData = req.body;
-                const crisisService = new crisis_service_1.CrisisService(); // Instantiate the service
-                const updatedCrisis = yield crisisService.updateCrisis(crisisId, crisisData);
+                const updatedCrisis = yield this.crisisService.updateCrisis(crisisId, crisisData);
                 return res.status(200).json({
                     message: 'Crisis updated successfully',
                     crisis: updatedCrisis,
@@ -63,13 +94,12 @@ class CrisisController {
             }
         });
     }
-    // Admin or authorized users can delete a crisis
-    static deleteCrisis(req, res) {
+    // Admin can delete a crisis
+    deleteCrisis(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const crisisId = parseInt(req.params.id, 10);
-                const crisisService = new crisis_service_1.CrisisService(); // Instantiate the service
-                yield crisisService.deleteCrisis(crisisId);
+                yield this.crisisService.deleteCrisis(crisisId);
                 return res.status(204).send();
             }
             catch (error) {

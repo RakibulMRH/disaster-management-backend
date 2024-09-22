@@ -23,7 +23,32 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
-app.use(morgan('combined'));
+app.use(morgan('dev'));
+
+const expresss = require('express');
+const paths = require('path'); 
+ 
+// Enable CORS
+app.use(cors({
+  origin: 'http://localhost:4200',  // Allow requests from Angular frontend
+  credentials: true,                // Allow credentials like cookies, headers
+  methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
+  allowedHeaders: 'Content-Type,Authorization'  // Allowed headers
+}));
+
+
+// Define the path to your uploads folder (outside the root project folder)
+const uploadsPath = paths.resolve(__dirname, '../uploads');  // Adjust the path accordingly
+
+
+// Serve static files from the "uploads" folder
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+}, express.static(uploadsPath));
+
+console.log(`Serving static files from: ${uploadsPath}`);
+
 
 // API Routes
 app.use(routes); 

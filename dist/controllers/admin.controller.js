@@ -72,6 +72,24 @@ class AdminController {
             }
         });
     }
+    // Admin updates a crisis (approve or modify crisis details)
+    static updateCrisis(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const crisisId = parseInt(req.params.id, 10);
+                const crisisData = req.body;
+                const crisisService = new crisis_service_1.CrisisService(); // Instantiate the service
+                const updatedCrisis = yield crisisService.updateCrisis(crisisId, crisisData);
+                return res.status(200).json({
+                    message: 'Crisis updated successfully',
+                    crisis: updatedCrisis,
+                });
+            }
+            catch (error) {
+                return res.status(404).json({ message: error.message });
+            }
+        });
+    }
     // Admin deletes a crisis
     static deleteCrisis(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

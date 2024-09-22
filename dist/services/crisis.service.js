@@ -30,6 +30,9 @@ class CrisisService {
     createCrisis(createCrisisDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const crisis = this.crisisRepository.create(Object.assign(Object.assign({}, createCrisisDto), { status: 'pending', dateReported: new Date() }));
+            if (createCrisisDto.imageUrl) {
+                crisis.imageUrl = createCrisisDto.imageUrl;
+            }
             return yield this.crisisRepository.save(crisis);
         });
     }

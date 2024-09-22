@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const class_validator_1 = require("class-validator");
-const volunteerAssignment_model_1 = require("./volunteerAssignment.model");
+const volunteerAssignmentLog_model_1 = require("./volunteerAssignmentLog.model");
 const crisis_model_1 = require("./crisis.model");
 const inventoryTransaction_model_1 = require("./inventoryTransaction.model");
 const expense_model_1 = require("./expense.model");
@@ -63,13 +63,13 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isVerified", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => volunteerAssignment_model_1.VolunteerAssignment, (assignment) => assignment.volunteer),
+    (0, typeorm_1.Column)({ type: 'varchar', default: 'unassigned' }),
+    __metadata("design:type", String)
+], User.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => volunteerAssignmentLog_model_1.VolunteerAssignmentLog, (assignment) => assignment.user),
     __metadata("design:type", Array)
 ], User.prototype, "assignments", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => volunteerAssignment_model_1.VolunteerAssignment, (assignment) => assignment.assignedByAdmin),
-    __metadata("design:type", Array)
-], User.prototype, "assignedTasks", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => crisis_model_1.Crisis, (crisis) => crisis.reportedByUser),
     __metadata("design:type", Array)
@@ -86,6 +86,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => expense_model_1.Expense, (expense) => expense.user),
     __metadata("design:type", Array)
 ], User.prototype, "expenses", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "resetPasswordToken", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "resetPasswordExpires", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['username', 'email'])

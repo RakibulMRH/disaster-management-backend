@@ -24,7 +24,21 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use((0, helmet_1.default)());
-app.use((0, morgan_1.default)('combined'));
+app.use((0, morgan_1.default)('dev'));
+const expresss = require('express');
+const paths = require('path');
+// Enable CORS
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:4200', // Allow requests from Angular frontend
+    credentials: true, // Allow credentials like cookies, headers
+    methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
+    allowedHeaders: 'Content-Type,Authorization' // Allowed headers
+}));
+// Define the path to your uploads folder (outside the root project folder)
+const uploadsPath = paths.resolve(__dirname, '../uploads'); // Adjust the path accordingly
+// Serve static files from the "uploads" folder
+app.use('/uploads', expresss.static(uploadsPath));
+console.log(`Serving static files from: ${uploadsPath}`);
 // API Routes
 app.use(routes_1.default);
 // Swagger setup

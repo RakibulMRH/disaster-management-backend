@@ -9,45 +9,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InventoryTransaction = void 0;
+exports.Assignment = void 0;
+// src/models/assignment.model.ts
 const typeorm_1 = require("typeorm");
-const inventoryItem_model_1 = require("./inventoryItem.model");
-const user_model_1 = require("./user.model");
-let InventoryTransaction = class InventoryTransaction {
+const volunteerAssignmentLog_model_1 = require("./volunteerAssignmentLog.model");
+let Assignment = class Assignment {
 };
-exports.InventoryTransaction = InventoryTransaction;
+exports.Assignment = Assignment;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], InventoryTransaction.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => inventoryItem_model_1.InventoryItem, (item) => item.transactions, { onDelete: 'CASCADE' }),
-    __metadata("design:type", inventoryItem_model_1.InventoryItem)
-], InventoryTransaction.prototype, "item", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'varchar' }),
-    __metadata("design:type", String)
-], InventoryTransaction.prototype, "transactionType", void 0);
+], Assignment.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], InventoryTransaction.prototype, "quantity", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'decimal', precision: 12, scale: 2, nullable: true }),
-    __metadata("design:type", Number)
-], InventoryTransaction.prototype, "cost", void 0);
-__decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], InventoryTransaction.prototype, "date", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => user_model_1.User),
-    __metadata("design:type", user_model_1.User)
-], InventoryTransaction.prototype, "user", void 0);
+    __metadata("design:type", String)
+], Assignment.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
-], InventoryTransaction.prototype, "notes", void 0);
-exports.InventoryTransaction = InventoryTransaction = __decorate([
+], Assignment.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Assignment.prototype, "requiredVolunteers", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], Assignment.prototype, "assignedVolunteers", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Assignment.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: 'recruiting' }),
+    __metadata("design:type", String)
+], Assignment.prototype, "status", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => volunteerAssignmentLog_model_1.VolunteerAssignmentLog, (volunteerAssignmentLog) => volunteerAssignmentLog.assignment),
+    __metadata("design:type", Array)
+], Assignment.prototype, "volunteerAssignments", void 0);
+exports.Assignment = Assignment = __decorate([
     (0, typeorm_1.Entity)()
-], InventoryTransaction);
+], Assignment);

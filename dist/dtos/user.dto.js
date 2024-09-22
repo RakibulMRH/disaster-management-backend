@@ -73,3 +73,13 @@ __decorate([
     (0, class_validator_1.Max)(120),
     __metadata("design:type", Number)
 ], UpdateUserDto.prototype, "age", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "currentPassword", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "newPassword", void 0);

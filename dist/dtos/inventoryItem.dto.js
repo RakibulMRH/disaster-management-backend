@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateInventoryItemDto = exports.CreateInventoryItemDto = void 0;
-// src/dtos/inventoryItem.dto.ts
 const class_validator_1 = require("class-validator");
 class CreateInventoryItemDto {
 }
@@ -22,14 +21,20 @@ __decorate([
 ], CreateInventoryItemDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEnum)(['Relief', 'Expense']),
     __metadata("design:type", String)
 ], CreateInventoryItemDto.prototype, "type", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateInventoryItemDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreateInventoryItemDto.prototype, "quantity", void 0);
 class UpdateInventoryItemDto {
 }
 exports.UpdateInventoryItemDto = UpdateInventoryItemDto;
@@ -40,7 +45,6 @@ __decorate([
 ], UpdateInventoryItemDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsEnum)(['Relief', 'Expense']),
     __metadata("design:type", String)
 ], UpdateInventoryItemDto.prototype, "type", void 0);
@@ -49,3 +53,8 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateInventoryItemDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateInventoryItemDto.prototype, "quantity", void 0);

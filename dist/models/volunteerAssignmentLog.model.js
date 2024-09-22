@@ -9,39 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Expense = void 0;
+exports.VolunteerAssignmentLog = void 0;
+// src/models/volunteerAssignment.model.ts
 const typeorm_1 = require("typeorm");
 const user_model_1 = require("./user.model");
-const inventoryItem_model_1 = require("./inventoryItem.model");
-let Expense = class Expense {
+const assignment_model_1 = require("./assignment.model");
+let VolunteerAssignmentLog = class VolunteerAssignmentLog {
 };
-exports.Expense = Expense;
+exports.VolunteerAssignmentLog = VolunteerAssignmentLog;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Expense.prototype, "id", void 0);
+], VolunteerAssignmentLog.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => inventoryItem_model_1.InventoryItem, { nullable: true }),
-    __metadata("design:type", inventoryItem_model_1.InventoryItem)
-], Expense.prototype, "item", void 0);
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.assignments),
+    __metadata("design:type", user_model_1.User)
+], VolunteerAssignmentLog.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'decimal', precision: 12, scale: 2 }),
-    __metadata("design:type", Number)
-], Expense.prototype, "amount", void 0);
+    (0, typeorm_1.ManyToOne)(() => assignment_model_1.Assignment, (assignment) => assignment.volunteerAssignments),
+    __metadata("design:type", assignment_model_1.Assignment)
+], VolunteerAssignmentLog.prototype, "assignment", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
-    (0, typeorm_1.Index)() // Added index to date for faster range querying
-    ,
     __metadata("design:type", Date)
-], Expense.prototype, "date", void 0);
+], VolunteerAssignmentLog.prototype, "completedAt", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_model_1.User),
-    __metadata("design:type", user_model_1.User)
-], Expense.prototype, "user", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], Expense.prototype, "notes", void 0);
-exports.Expense = Expense = __decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], VolunteerAssignmentLog.prototype, "assignedAt", void 0);
+exports.VolunteerAssignmentLog = VolunteerAssignmentLog = __decorate([
     (0, typeorm_1.Entity)()
-], Expense);
+], VolunteerAssignmentLog);

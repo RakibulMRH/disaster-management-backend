@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryItem = void 0;
 const typeorm_1 = require("typeorm");
 const inventoryTransaction_model_1 = require("./inventoryTransaction.model");
+const user_model_1 = require("./user.model");
 let InventoryItem = class InventoryItem {
 };
 exports.InventoryItem = InventoryItem;
@@ -33,9 +34,21 @@ __decorate([
     __metadata("design:type", String)
 ], InventoryItem.prototype, "description", void 0);
 __decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], InventoryItem.prototype, "quantity", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => inventoryTransaction_model_1.InventoryTransaction, (transaction) => transaction.item),
     __metadata("design:type", Array)
 ], InventoryItem.prototype, "transactions", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User),
+    __metadata("design:type", user_model_1.User)
+], InventoryItem.prototype, "createdBy", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_model_1.User, { nullable: true }),
+    __metadata("design:type", user_model_1.User)
+], InventoryItem.prototype, "updatedBy", void 0);
 exports.InventoryItem = InventoryItem = __decorate([
     (0, typeorm_1.Entity)()
 ], InventoryItem);

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Crisis = void 0;
 const typeorm_1 = require("typeorm");
 const user_model_1 = require("./user.model");
+const donation_model_1 = require("./donation.model");
 let Crisis = class Crisis {
 };
 exports.Crisis = Crisis;
@@ -61,6 +62,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => user_model_1.User, (user) => user.approvedCrises, { nullable: true }),
     __metadata("design:type", user_model_1.User)
 ], Crisis.prototype, "approvedByAdmin", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => donation_model_1.Donation, (donation) => donation.crisis),
+    __metadata("design:type", Array)
+], Crisis.prototype, "donations", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)

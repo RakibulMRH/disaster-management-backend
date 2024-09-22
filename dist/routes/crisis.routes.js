@@ -1,67 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const crisis_controller_1 = require("../controllers/crisis.controller");
+const crisis_controller_1 = require("../controllers/crisis.controller"); // Correct import
+const crisisController = new crisis_controller_1.CrisisController(); // Instantiate CrisisController
 const router = (0, express_1.Router)();
-/**
- * @swagger
- * tags:
- *   name: Crises
- *   description: Crisis management for anonymous and authenticated users
- */
 /**
  * @swagger
  * /crises:
  *   get:
- *     summary: Get all approved crises (Anonymous access)
+ *     summary: Get a list of all approved crises
  *     tags: [Crises]
  *     responses:
  *       200:
- *         description: A list of approved crises
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 1
- *                   title:
- *                     type: string
- *                     example: 'Flood in Region X'
- *                   description:
- *                     type: string
- *                     example: 'Heavy flooding has affected the entire region.'
- *                   location:
- *                     type: string
- *                     example: 'Region X'
- *                   severity:
- *                     type: string
- *                     example: 'high'
- *                   requiredHelp:
- *                     type: string
- *                     example: 'Medical assistance and food supplies'
- *                   status:
- *                     type: string
- *                     example: 'approved'
- *                   dateReported:
- *                     type: string
- *                     format: date-time
- *                     example: '2024-09-19T04:38:53.485Z'
+ *         description: List of crises
  */
-router.get('/', crisis_controller_1.CrisisController.listCrises);
+router.get('/', (req, res) => crisisController.listCrises(req, res));
 /**
  * @swagger
  * /crises:
  *   post:
- *     summary: Create a new crisis (Anonymous access)
+ *     summary: Create a new crisis (with optional image)
  *     tags: [Crises]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -70,42 +33,75 @@ router.get('/', crisis_controller_1.CrisisController.listCrises);
  *             properties:
  *               title:
  *                 type: string
- *                 example: 'Flood in Region X'
+ *                 description: Title of the crisis
  *               description:
  *                 type: string
- *                 example: 'Heavy flooding has affected the entire region.'
+ *                 description: Description of the crisis
  *               location:
  *                 type: string
- *                 example: 'Region X'
+ *                 description: Location of the crisis
+ *               imageUrl:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image URL of the crisis
  *               severity:
  *                 type: string
- *                 example: 'high'
+ *                 enum: [low, medium, high, critical]
+ *                 description: Severity level of the crisis
  *               requiredHelp:
  *                 type: string
- *                 example: 'Medical assistance and food supplies'
+ *                 description: Type of help required
  *     responses:
  *       201:
  *         description: Crisis created successfully (pending approval)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: 'Crisis created successfully. Pending approval from admin.'
- *                 crisis:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                       example: 1
- *                     title:
- *                       type: string
- *                       example: 'Flood in Region X'
- *                     status:
- *                       type: string
- *                       example: 'pending'
  */
-router.post('/', crisis_controller_1.CrisisController.createCrisis);
+router.post('/', crisisController.createCrisis);
+/**
+ * @swagger
+ * /crises/{id}:
+ *   put:
+ *     summary: Update a crisis (Admin only)
+ *     tags: [Crises]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Crisis ID
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Crisis updated successfully
+ */
+router.put('/:id', (req, res) => crisisController.updateCrisis(req, res));
+/**
+ * @swagger
+ * /crises/{id}:
+ *   delete:
+ *     summary: Delete a crisis (Admin only)
+ *     tags: [Crises]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Crisis ID
+ *     responses:
+ *       204:
+ *         description: Crisis deleted successfully
+ */
+router.delete('/:id', (req, res) => crisisController.deleteCrisis(req, res));
 exports.default = router;

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Donation = void 0;
 const typeorm_1 = require("typeorm");
+const crisis_model_1 = require("./crisis.model");
 let Donation = class Donation {
 };
 exports.Donation = Donation;
@@ -36,6 +37,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Donation.prototype, "notes", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => crisis_model_1.Crisis, (crisis) => crisis.donations, { onDelete: 'SET NULL' }),
+    __metadata("design:type", crisis_model_1.Crisis)
+], Donation.prototype, "crisis", void 0);
 exports.Donation = Donation = __decorate([
     (0, typeorm_1.Entity)()
 ], Donation);

@@ -27,7 +27,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     createUserDto.name = body.name;
     createUserDto.email = body.email; // Optional fields
     createUserDto.phoneNumber = body.phoneNumber; // Optional fields
-    createUserDto.age = body.age; // Optional fields
+    createUserDto.age = body.age;
     // Validate the DTO
     const errors = yield (0, class_validator_1.validate)(createUserDto);
     if (errors.length > 0) {
@@ -76,6 +76,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     // Generate JWT token
     const token = auth_service_1.AuthService.generateJwt(user);
-    return res.status(200).json({ message: 'Login successful', token });
+    // Return the whole user object along with the token
+    return res.status(200).json({ message: 'Login successful', token, user });
 });
 exports.login = login;
