@@ -36,11 +36,11 @@ class DonationController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const crisisId = parseInt(req.params.crisisId, 10);
-                const totalFund = yield this.donationService.getTotalFund(crisisId);
-                return res.status(200).json({ totalFund });
+                const { totalFund, goal } = yield this.donationService.getTotalFund(crisisId);
+                res.status(200).json({ totalFund, goal });
             }
             catch (error) {
-                return res.status(500).json({ message: error.message });
+                res.status(400).json({ message: error.message });
             }
         });
     }
@@ -63,6 +63,18 @@ class DonationController {
             try {
                 const donationsFunds = yield this.donationService.getAllDonationsFunds();
                 return res.status(200).json(donationsFunds);
+            }
+            catch (error) {
+                return res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    // Get all donations list for all crises
+    getAllDonationsList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const donationsList = yield this.donationService.getAllDonationsList();
+                return res.status(200).json(donationsList);
             }
             catch (error) {
                 return res.status(500).json({ message: error.message });

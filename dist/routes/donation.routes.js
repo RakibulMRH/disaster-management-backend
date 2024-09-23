@@ -160,4 +160,38 @@ router.get('/list/:crisisId', (req, res) => donationController.getAllDonations(r
  *                     example: 5000
  */
 router.get('/total', (req, res) => donationController.getAllDonationsFunds(req, res));
+/**
+ * @swagger
+ * /donations/all:
+ *   get:
+ *     summary: Get all donations list for all crises
+ *     tags: [Donations]
+ *     responses:
+ *       200:
+ *         description: List of all donations for all crises
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   donorName:
+ *                     type: string
+ *                     example: 'John Doe'
+ *                   amount:
+ *                     type: number
+ *                     example: 100
+ *                   crisisId:
+ *                     type: integer
+ *                     example: 1
+ *                   dateDonated:
+ *                     type: string
+ *                     format: date-time
+ *                     example: '2024-09-19T12:34:56Z'
+ */
+router.get('/all', (req, res) => donationController.getAllDonationsList(req, res));
 exports.default = router;

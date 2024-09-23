@@ -70,6 +70,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Date)
 ], Crisis.prototype, "dateApproved", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], Crisis.prototype, "goal", void 0);
 exports.Crisis = Crisis = __decorate([
     (0, typeorm_1.Entity)()
 ], Crisis);

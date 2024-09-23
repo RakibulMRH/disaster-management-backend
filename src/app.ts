@@ -11,7 +11,7 @@ import path from 'path';
 import { AppDataSource } from './config/database.config';
 import { swaggerSpecs } from './config/swagger.config'; // Import the Swagger specs
 import swaggerUi from 'swagger-ui-express';
-import { errorHandler } from './middleware/error.middleware';
+import { errorHandler } from './middleware/error.middleware';  
 import routes from './routes'; 
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });

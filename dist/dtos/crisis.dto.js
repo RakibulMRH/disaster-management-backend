@@ -45,6 +45,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCrisisDto.prototype, "requiredHelp", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Number)
+], CreateCrisisDto.prototype, "goal", void 0);
 class UpdateCrisisDto {
 }
 exports.UpdateCrisisDto = UpdateCrisisDto;
@@ -85,3 +89,8 @@ __decorate([
     (0, class_validator_1.IsEnum)(['pending', 'approved', 'resolved', 'rejected']),
     __metadata("design:type", String)
 ], UpdateCrisisDto.prototype, "status", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Number)
+], UpdateCrisisDto.prototype, "goal", void 0);

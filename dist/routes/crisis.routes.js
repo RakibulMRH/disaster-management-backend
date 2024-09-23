@@ -30,6 +30,7 @@ router.get('/', (req, res) => crisisController.listCrises(req, res));
  *             required:
  *               - title
  *               - severity
+ *               - goal
  *             properties:
  *               title:
  *                 type: string
@@ -51,6 +52,9 @@ router.get('/', (req, res) => crisisController.listCrises(req, res));
  *               requiredHelp:
  *                 type: string
  *                 description: Type of help required
+ *               goal:
+ *                 type: number
+ *                 description: Goal amount for the crisis
  *     responses:
  *       201:
  *         description: Crisis created successfully (pending approval)

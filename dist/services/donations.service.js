@@ -32,12 +32,19 @@ class DonationService {
     // Get the total fund for a specific crisis
     getTotalFund(crisisId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.donationRepository
+            const totalFundResult = yield this.donationRepository
                 .createQueryBuilder('donation')
                 .select('SUM(donation.amount)', 'total')
                 .where('donation.crisisId = :crisisId', { crisisId })
                 .getRawOne();
-            return parseFloat(result.total);
+            const crisis = yield this.crisisRepository.findOneBy({ id: crisisId });
+            if (!crisis) {
+                throw new Error('Crisis not found');
+            }
+            return {
+                totalFund: parseFloat(totalFundResult.total),
+                goal: crisis.goal
+            };
         });
     }
     // Get all donations for a specific crisis
@@ -57,6 +64,14 @@ class DonationService {
                 .select('SUM(donation.amount)', 'totalFund')
                 .getRawOne();
             return parseFloat(result.totalFund);
+        });
+    }
+    // Get all donations list for all crises
+    getAllDonationsList() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.donationRepository.find({
+                relations: ['crisis'],
+            });
         });
     }
 }

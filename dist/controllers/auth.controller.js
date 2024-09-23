@@ -69,6 +69,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!user) {
         return res.status(404).json({ message: 'User not found' });
     }
+    if (!user.isVerified) {
+        return res.status(403).json({ message: 'User is not verified' });
+    }
     // Validate the password
     const isPasswordValid = yield auth_service_1.AuthService.validatePassword(loginDto.password, user.password);
     if (!isPasswordValid) {

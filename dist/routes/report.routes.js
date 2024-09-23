@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const reports_controller_1 = require("../controllers/reports.controller");
 const auth_middleware_1 = require("../middleware/auth.middleware"); // Assuming authMiddleware is defined
-const role_middleware_1 = require("@/middleware/role.middleware");
+const role_middleware_1 = require("../middleware/role.middleware");
 const router = (0, express_1.Router)();
 const reportController = new reports_controller_1.ReportController();
 // GET /reports/donations?startDate=2024-09-19&endDate=2024-09-19
