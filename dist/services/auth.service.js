@@ -37,8 +37,19 @@ class AuthService {
     }
     // Function to generate a JWT token
     static generateJwt(user) {
-        const payload = { id: user.id, username: user.username, role: user.role };
-        return jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined in environment variables');
+        }
+        const payload = {
+            id: user.id,
+            username: user.username,
+            role: user.role,
+        };
+        const options = {
+            expiresIn: '1h',
+            algorithm: 'HS256'
+        };
+        return jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, options);
     }
     // Function to find a user by username or email
     static findByUsernameOrEmail(usernameOrEmail) {

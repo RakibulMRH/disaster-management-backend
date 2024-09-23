@@ -45,9 +45,13 @@ class UserService {
             }
             if (updateUserDto.newPassword) {
                 const { currentPassword, newPassword } = updateUserDto;
-                // Check if current password is provided
+                // Check if current password is  
                 if (!currentPassword) {
                     throw new Error('Current password is required to update the password');
+                }
+                const isSame = yield (0, bcryptjs_1.compare)(currentPassword, user.password);
+                if (isSame) {
+                    throw new Error('New password must be different from the current password');
                 }
                 // Compare current password with the stored password
                 const isMatch = yield (0, bcryptjs_1.compare)(currentPassword, user.password);
@@ -55,7 +59,7 @@ class UserService {
                     throw new Error('Current password is incorrect');
                 }
                 // Hash the new password
-                updateUserDto.newPassword = yield (0, bcryptjs_1.hash)(newPassword, 10);
+                user.password = yield (0, bcryptjs_1.hash)(newPassword, 10);
             }
             Object.assign(user, updateUserDto);
             return yield this.userRepository.save(user);

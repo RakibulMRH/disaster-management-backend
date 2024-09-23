@@ -16,7 +16,6 @@ const database_config_1 = require("./config/database.config");
 const swagger_config_1 = require("./config/swagger.config"); // Import the Swagger specs
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const error_middleware_1 = require("./middleware/error.middleware");
-const role_middleware_1 = require("./middleware/role.middleware");
 const routes_1 = __importDefault(require("./routes"));
 dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
 // Initialize Express
@@ -49,8 +48,6 @@ app.use(routes_1.default);
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpecs));
 // Error Handling Middleware
 app.use(error_middleware_1.errorHandler);
-// Role Middleware
-app.use(role_middleware_1.roleMiddleware);
 // Establish the database connection and start the server
 database_config_1.AppDataSource.initialize()
     .then(() => {

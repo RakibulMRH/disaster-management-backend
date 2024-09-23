@@ -61,7 +61,7 @@ class CrisisController {
                 catch (error) {
                     return res.status(400).json({ message: error.message });
                 }
-            })
+            }),
         ];
         this.crisisService = new crisis_service_1.CrisisService(); // Instantiate CrisisService
     }
@@ -70,6 +70,18 @@ class CrisisController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const crises = yield this.crisisService.getAllCrises();
+                return res.status(200).json(crises);
+            }
+            catch (error) {
+                return res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    // List all pending crises 
+    listPendingCrises(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const crises = yield this.crisisService.getPendingCrises();
                 return res.status(200).json(crises);
             }
             catch (error) {

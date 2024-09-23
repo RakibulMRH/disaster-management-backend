@@ -26,6 +26,13 @@ class CrisisService {
             });
         });
     }
+    getPendingCrises() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.crisisRepository.find({
+                where: { status: 'pending' }, // Show only approved crises
+            });
+        });
+    }
     // Create a new crisis (Anonymous users can add crises)
     createCrisis(createCrisisDto) {
         return __awaiter(this, void 0, void 0, function* () {

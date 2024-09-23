@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const crisis_controller_1 = require("../controllers/crisis.controller"); // Correct import
+const role_middleware_1 = require("../middleware/role.middleware");
+const auth_middleware_1 = require("../middleware/auth.middleware");
 const crisisController = new crisis_controller_1.CrisisController(); // Instantiate CrisisController
 const router = (0, express_1.Router)();
 /**
@@ -15,6 +17,17 @@ const router = (0, express_1.Router)();
  *         description: List of crises
  */
 router.get('/', (req, res) => crisisController.listCrises(req, res));
+/**
+ * @swagger
+ * /crises/pending:
+ *   get:
+ *     summary: Get a list of all pending crises
+ *     tags: [Crises]
+ *     responses:
+ *       200:
+ *         description: List of pending crises
+ */
+router.get('/pending', (req, res) => crisisController.listPendingCrises(req, res));
 /**
  * @swagger
  * /crises:
@@ -41,10 +54,10 @@ router.get('/', (req, res) => crisisController.listCrises(req, res));
  *               location:
  *                 type: string
  *                 description: Location of the crisis
- *               imageUrl:
+ *               image:
  *                 type: string
  *                 format: binary
- *                 description: Image URL of the crisis
+ *                 description: Image of the crisis
  *               severity:
  *                 type: string
  *                 enum: [low, medium, high, critical]
@@ -89,7 +102,7 @@ router.post('/', crisisController.createCrisis);
  *       200:
  *         description: Crisis updated successfully
  */
-router.put('/:id', (req, res) => crisisController.updateCrisis(req, res));
+router.put('/:id', [auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(['Admin'])], (req, res) => crisisController.updateCrisis(req, res));
 /**
  * @swagger
  * /crises/{id}:
@@ -107,5 +120,5 @@ router.put('/:id', (req, res) => crisisController.updateCrisis(req, res));
  *       204:
  *         description: Crisis deleted successfully
  */
-router.delete('/:id', (req, res) => crisisController.deleteCrisis(req, res));
+router.delete('/:id', [auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(['Admin'])], (req, res) => crisisController.deleteCrisis(req, res));
 exports.default = router;

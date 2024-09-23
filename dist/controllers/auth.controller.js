@@ -38,6 +38,12 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (existingUser) {
         return res.status(400).json({ message: 'Username or email already in use' });
     }
+    if (createUserDto.email) {
+        const existingUser3 = yield auth_service_1.AuthService.findByUsernameOrEmail(createUserDto.email);
+        if (existingUser3) {
+            return res.status(400).json({ message: 'Username or email already in use' });
+        }
+    }
     // Hash the password
     const hashedPassword = yield bcryptjs_1.default.hash(createUserDto.password, 10);
     // Create new user

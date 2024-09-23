@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // user defined in src/types/express/index.d.ts
+        req.user = decoded; // Attach decoded user information to req.user
         next();
     }
     catch (err) {

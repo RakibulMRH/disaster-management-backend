@@ -41,11 +41,11 @@ class InventoryController {
         });
         // Update an inventory item
         this.updateItem = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            var _a;
+            var _b;
             try {
                 const itemId = parseInt(req.params.id, 10);
                 const updateDto = req.body;
-                const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+                const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
                 if (!userId) {
                     return res.status(400).json({ message: 'User ID is required' });
                 }
@@ -69,10 +69,10 @@ class InventoryController {
         });
         // Record a transaction
         this.recordTransaction = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            var _a;
+            var _c;
             try {
                 const transactionDto = req.body;
-                const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+                const userId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
                 if (!userId) {
                     return res.status(400).json({ message: 'User ID is required' });
                 }
