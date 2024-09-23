@@ -1,7 +1,7 @@
 import { AppDataSource } from '../config/database.config';
 import { User } from '../models/user.model';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { Algorithm } from 'jsonwebtoken';
 
 export class AuthService {
   // Function to create a new user
@@ -23,17 +23,25 @@ export class AuthService {
   }
 
   // Function to generate a JWT token
-  static generateJwt(user: User) {
+  static generateJwt(user: User): string {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined in environment variables');
+    }
+
     const payload = {
       id: user.id,
-      username: user.username,
-      email: user.email, // Include email in the payload
+      username: user.username, 
       role: user.role,
-      // Add any other user information you need
+      
     };
-    return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
-  }
 
+    const options: jwt.SignOptions = {
+      expiresIn: '1h',  
+      algorithm: 'HS256' as Algorithm 
+    };
+
+    return jwt.sign(payload, process.env.JWT_SECRET, options);
+  }
 
   // Function to find a user by username or email
   static async findByUsernameOrEmail(usernameOrEmail: string) {

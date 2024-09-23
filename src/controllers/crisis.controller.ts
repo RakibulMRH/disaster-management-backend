@@ -41,6 +41,16 @@ export class CrisisController {
     }
   }
 
+  // List all pending crises 
+  async listPendingCrises(req: Request, res: Response) {
+    try {
+      const crises = await this.crisisService.getPendingCrises();
+      return res.status(200).json(crises);
+    } catch (error) {
+      return res.status(500).json({ message: (error as Error).message });
+    }
+  }
+
   // Create a crisis with an optional image
   createCrisis = [
     upload.single('image'), // Handle image upload

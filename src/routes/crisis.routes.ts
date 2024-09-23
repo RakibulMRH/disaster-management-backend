@@ -1,5 +1,8 @@
 import { Router } from 'express';
 import { CrisisController } from '../controllers/crisis.controller'; // Correct import
+import { roleMiddleware } from '@/middleware/role.middleware';
+import { Request, Response } from 'express';
+import  { authMiddleware } from '@/middleware/auth.middleware';
 
 const crisisController = new CrisisController(); // Instantiate CrisisController
 
@@ -16,6 +19,19 @@ const router = Router();
  *         description: List of crises
  */
 router.get('/', (req, res) => crisisController.listCrises(req, res));
+
+/**
+ * @swagger
+ * /crises/pending:
+ *   get:
+ *     summary: Get a list of all pending crises
+ *     tags: [Crises]
+ *     responses:
+ *       200:
+ *         description: List of pending crises
+ */
+
+router.get('/pending', (req, res) => crisisController.listPendingCrises(req, res));
 
 /**
  * @swagger
@@ -92,7 +108,8 @@ router.post('/', crisisController.createCrisis);
  *       200:
  *         description: Crisis updated successfully
  */
-router.put('/:id', (req, res) => crisisController.updateCrisis(req, res));
+ 
+router.put('/:id', [authMiddleware, roleMiddleware(['Admin'])], (req: Request, res: Response) => crisisController.updateCrisis(req, res));
 
 /**
  * @swagger
@@ -111,6 +128,6 @@ router.put('/:id', (req, res) => crisisController.updateCrisis(req, res));
  *       204:
  *         description: Crisis deleted successfully
  */
-router.delete('/:id', (req, res) => crisisController.deleteCrisis(req, res));
+router.delete('/:id', [ authMiddleware, roleMiddleware(['Admin'])], (req: Request, res: Response) => crisisController.deleteCrisis(req, res));
 
 export default router;

@@ -14,6 +14,12 @@ export class CrisisService {
     });
   }
 
+  async getPendingCrises(): Promise<Crisis[]> {
+    return await this.crisisRepository.find({
+      where: { status: 'pending' }, // Show only approved crises
+    });
+  }
+
   // Create a new crisis (Anonymous users can add crises)
   async createCrisis(createCrisisDto: CreateCrisisDto): Promise<Crisis> {
     const crisis = this.crisisRepository.create({
