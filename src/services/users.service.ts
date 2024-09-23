@@ -35,9 +35,13 @@ export class UserService {
     if (updateUserDto.newPassword) {
       const { currentPassword, newPassword } = updateUserDto;
 
-      // Check if current password is provided
+      // Check if current password is  
       if (!currentPassword) {
         throw new Error('Current password is required to update the password');
+      }
+      const isSame = await compare(currentPassword, user.password);
+      if (isSame) {
+        throw new Error('New password must be different from the current password');
       }
 
       // Compare current password with the stored password
@@ -47,7 +51,7 @@ export class UserService {
       }
 
       // Hash the new password
-      updateUserDto.newPassword = await hash(newPassword, 10);
+      user.password = await hash(newPassword, 10);
     }
 
     Object.assign(user, updateUserDto);

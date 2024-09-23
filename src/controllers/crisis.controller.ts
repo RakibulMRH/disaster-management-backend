@@ -69,9 +69,9 @@ export class CrisisController {
       } catch (error) {
         return res.status(400).json({ message: (error as Error).message });
       }
-    }
+    },
   ];
-
+  
   // Admin can update a crisis
   async updateCrisis(req: Request, res: Response) {
     try {

@@ -27,6 +27,12 @@ export const register = async (req: Request, res: Response) => {
   if (existingUser) {
     return res.status(400).json({ message: 'Username or email already in use' });
   }
+  if (createUserDto.email) {
+    const existingUser3 = await AuthService.findByUsernameOrEmail(createUserDto.email);
+    if (existingUser3) {
+      return res.status(400).json({ message: 'Username or email already in use' });
+    }
+  }
 
   // Hash the password
   const hashedPassword = await bcrypt.hash(createUserDto.password, 10);

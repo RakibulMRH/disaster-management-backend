@@ -24,9 +24,16 @@ export class AuthService {
 
   // Function to generate a JWT token
   static generateJwt(user: User) {
-    const payload = { id: user.id, username: user.username, role: user.role };
+    const payload = {
+      id: user.id,
+      username: user.username,
+      email: user.email, // Include email in the payload
+      role: user.role,
+      // Add any other user information you need
+    };
     return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
   }
+
 
   // Function to find a user by username or email
   static async findByUsernameOrEmail(usernameOrEmail: string) {

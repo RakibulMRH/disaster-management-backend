@@ -43,10 +43,10 @@ router.get('/', (req, res) => crisisController.listCrises(req, res));
  *               location:
  *                 type: string
  *                 description: Location of the crisis
- *               imageUrl:
+ *               image:
  *                 type: string
  *                 format: binary
- *                 description: Image URL of the crisis
+ *                 description: Image of the crisis
  *               severity:
  *                 type: string
  *                 enum: [low, medium, high, critical]
