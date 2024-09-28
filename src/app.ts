@@ -14,6 +14,7 @@ import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from './middleware/error.middleware';  
 import routes from './routes'; 
 
+
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Initialize Express
@@ -30,7 +31,7 @@ const paths = require('path');
  
 // Enable CORS
 app.use(cors({
-  origin: 'http://localhost:4200',  // Allow requests from Angular frontend
+  origin:  process.env.ORIGIN ,  // Allow requests from Angular frontend
   credentials: true,                // Allow credentials like cookies, headers
   methods: 'GET,POST,PUT,DELETE',   // Allowed HTTP methods
   allowedHeaders: 'Content-Type,Authorization'  // Allowed headers
